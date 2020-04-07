@@ -22,16 +22,16 @@ class EsmClassTest(unittest.TestCase):
         e1 = EsmClass(EsmClassMode.DATAGRAM, EsmClassType.DEFAULT, set([EsmClassGsmFeatures.SET_REPLY_PATH]))
         e2 = EsmClass(EsmClassMode.DATAGRAM, EsmClassType.DEFAULT, [EsmClassGsmFeatures.SET_REPLY_PATH])
         self.assertEqual(e1, e2)
-    
+
     def test_equality_with_different_array_order(self):
         e1 = EsmClass(EsmClassMode.DATAGRAM, EsmClassType.DEFAULT, [EsmClassGsmFeatures.SET_REPLY_PATH, EsmClassGsmFeatures.UDHI_INDICATOR_SET])
         e2 = EsmClass(EsmClassMode.DATAGRAM, EsmClassType.DEFAULT, [EsmClassGsmFeatures.UDHI_INDICATOR_SET, EsmClassGsmFeatures.SET_REPLY_PATH])
         self.assertEqual(e1, e2)
-        
+
     def test_equality_with_array_duplicates(self):
         e1 = EsmClass(EsmClassMode.DATAGRAM, EsmClassType.DEFAULT, [EsmClassGsmFeatures.SET_REPLY_PATH, EsmClassGsmFeatures.SET_REPLY_PATH])
         e2 = EsmClass(EsmClassMode.DATAGRAM, EsmClassType.DEFAULT, [EsmClassGsmFeatures.SET_REPLY_PATH])
-        self.assertEqual(e1, e2)    
+        self.assertEqual(e1, e2)
 
 class RegisteredDeliveryTest(unittest.TestCase):
 
@@ -39,17 +39,13 @@ class RegisteredDeliveryTest(unittest.TestCase):
         r1 = RegisteredDelivery(RegisteredDeliveryReceipt.SMSC_DELIVERY_RECEIPT_REQUESTED, set([RegisteredDeliverySmeOriginatedAcks.SME_DELIVERY_ACK_REQUESTED]))
         r2 = RegisteredDelivery(RegisteredDeliveryReceipt.SMSC_DELIVERY_RECEIPT_REQUESTED, [RegisteredDeliverySmeOriginatedAcks.SME_DELIVERY_ACK_REQUESTED])
         self.assertEqual(r1, r2)
-    
+
     def test_equality_with_different_array_order(self):
         r1 = RegisteredDelivery(RegisteredDeliveryReceipt.SMSC_DELIVERY_RECEIPT_REQUESTED, [RegisteredDeliverySmeOriginatedAcks.SME_MANUAL_ACK_REQUESTED, RegisteredDeliverySmeOriginatedAcks.SME_DELIVERY_ACK_REQUESTED])
         r2 = RegisteredDelivery(RegisteredDeliveryReceipt.SMSC_DELIVERY_RECEIPT_REQUESTED, [RegisteredDeliverySmeOriginatedAcks.SME_DELIVERY_ACK_REQUESTED, RegisteredDeliverySmeOriginatedAcks.SME_MANUAL_ACK_REQUESTED])
         self.assertEqual(r1, r2)
-        
+
     def test_equality_with_array_duplicates(self):
         r1 = RegisteredDelivery(RegisteredDeliveryReceipt.SMSC_DELIVERY_RECEIPT_REQUESTED, [RegisteredDeliverySmeOriginatedAcks.SME_MANUAL_ACK_REQUESTED, RegisteredDeliverySmeOriginatedAcks.SME_MANUAL_ACK_REQUESTED])
         r2 = RegisteredDelivery(RegisteredDeliveryReceipt.SMSC_DELIVERY_RECEIPT_REQUESTED, [RegisteredDeliverySmeOriginatedAcks.SME_MANUAL_ACK_REQUESTED])
-        self.assertEqual(r1, r2)    
-
-        
-if __name__ == '__main__':
-    unittest.main()
+        self.assertEqual(r1, r2)

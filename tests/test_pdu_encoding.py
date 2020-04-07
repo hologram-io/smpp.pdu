@@ -312,17 +312,17 @@ class SubaddressEncoderTest(EncoderTest):
 class TimeEncoderEncoderTest(EncoderTest):
 
     def test_conversion(self):
-        self.do_conversion_test(TimeEncoder(), datetime(2007, 9, 27, 23, 34, 29, 800000), binascii.b2a_hex('070927233429800+' + '\0'))
+        self.do_conversion_test(TimeEncoder(), datetime(2007, 9, 27, 23, 34, 29, 800000), binascii.b2a_hex(b'070927233429800+' + b'\0'))
         self.do_conversion_test(TimeEncoder(), None, '00')
 
     def test_requireNull(self):
         encoder = TimeEncoder(requireNull=True)
         self.do_conversion_test(encoder, None, '00')
         self.assertRaises(ValueError, encoder.encode, datetime.now())
-        self.do_decode_parse_error_test(encoder.decode, CommandStatus.ESME_RUNKNOWNERR, binascii.b2a_hex('070927233429800+' + '\0'))
+        self.do_decode_parse_error_test(encoder.decode, CommandStatus.ESME_RUNKNOWNERR, binascii.b2a_hex(b'070927233429800+' + b'\0'))
 
     def test_decode_invalid(self):
-        self.do_decode_parse_error_test(TimeEncoder(decodeErrorStatus=CommandStatus.ESME_RINVSRCADR).decode, CommandStatus.ESME_RINVSRCADR, binascii.b2a_hex('070927233429800' + '\0'))
+        self.do_decode_parse_error_test(TimeEncoder(decodeErrorStatus=CommandStatus.ESME_RINVSRCADR).decode, CommandStatus.ESME_RINVSRCADR, binascii.b2a_hex(b'070927233429800' + b'\0'))
 
 class ShortMessageEncoderTest(EncoderTest):
 
@@ -386,13 +386,13 @@ class PDUEncoderTest(EncoderTest):
 
     def test_DeliverSM_syniverse_MO_conversion(self):
         pdu = DeliverSM(2676551972,
-            service_type = 'AWSBD',
+            service_type=b'AWSBD',
             source_addr_ton=AddrTon.INTERNATIONAL,
             source_addr_npi=AddrNpi.ISDN,
-            source_addr='16505551234',
+            source_addr=b'16505551234',
             dest_addr_ton=AddrTon.INTERNATIONAL,
             dest_addr_npi=AddrNpi.ISDN,
-            destination_addr='17735554070',
+            destination_addr=b'17735554070',
             esm_class=EsmClass(EsmClassMode.DEFAULT, EsmClassType.DEFAULT),
             protocol_id=0,
             priority_flag=PriorityFlag.LEVEL_0,
@@ -406,13 +406,13 @@ class PDUEncoderTest(EncoderTest):
 
     def test_DeliverSM_handset_ack_conversion(self):
         pdu = DeliverSM(10,
-            service_type = 'CMT',
+            service_type=b'CMT',
             source_addr_ton=AddrTon.INTERNATIONAL,
             source_addr_npi=AddrNpi.UNKNOWN,
-            source_addr='6515555678',
+            source_addr=b'6515555678',
             dest_addr_ton=AddrTon.INTERNATIONAL,
             dest_addr_npi=AddrNpi.UNKNOWN,
-            destination_addr='123',
+            destination_addr=b'123',
             esm_class=EsmClass(EsmClassMode.DEFAULT, EsmClassType.SMSC_DELIVERY_RECEIPT),
             protocol_id=0,
             priority_flag=PriorityFlag.LEVEL_0,
@@ -428,13 +428,13 @@ class PDUEncoderTest(EncoderTest):
 
     def test_DeliverSM_sybase_MO_conversion(self):
         pdu = DeliverSM(1,
-            service_type = 'CMT',
+            service_type=b'CMT',
             source_addr_ton=AddrTon.INTERNATIONAL,
             source_addr_npi=AddrNpi.UNKNOWN,
-            source_addr='3411149500001',
+            source_addr=b'3411149500001',
             dest_addr_ton=AddrTon.INTERNATIONAL,
             dest_addr_npi=AddrNpi.UNKNOWN,
-            destination_addr='12345455',
+            destination_addr=b'12345455',
             esm_class=EsmClass(EsmClassMode.DEFAULT, EsmClassType.DEFAULT),
             protocol_id=0,
             priority_flag=PriorityFlag.LEVEL_0,
@@ -448,13 +448,13 @@ class PDUEncoderTest(EncoderTest):
 
     def test_DeliverSM_with_subaddress(self):
         pdu = DeliverSM(1,
-            service_type = 'BM8',
+            service_type=b'BM8',
             source_addr_ton=AddrTon.INTERNATIONAL,
             source_addr_npi=AddrNpi.ISDN,
-            source_addr='46123456789',
+            source_addr=b'46123456789',
             dest_addr_ton=AddrTon.INTERNATIONAL,
             dest_addr_npi=AddrNpi.ISDN,
-            destination_addr='14046653410',
+            destination_addr=b'14046653410',
             esm_class=EsmClass(EsmClassMode.DEFAULT, EsmClassType.DEFAULT),
             protocol_id=0,
             priority_flag=PriorityFlag.LEVEL_0,
@@ -470,13 +470,13 @@ class PDUEncoderTest(EncoderTest):
 
     def test_DeliverSM_0348(self):
         pdu = SubmitSM(455569,
-            service_type='',
+            service_type=b'',
             source_addr_ton=AddrTon.ALPHANUMERIC,
             source_addr_npi=AddrNpi.UNKNOWN,
-            source_addr='0348',
+            source_addr=b'0348',
             dest_addr_ton=AddrTon.INTERNATIONAL,
             dest_addr_npi=AddrNpi.ISDN,
-            destination_addr='3969809342',
+            destination_addr=b'3969809342',
             esm_class=EsmClass(EsmClassMode.DEFAULT, EsmClassType.DEFAULT, [EsmClassGsmFeatures.UDHI_INDICATOR_SET]),
             protocol_id=0x7F,
             priority_flag=PriorityFlag.LEVEL_0,
@@ -502,7 +502,7 @@ class PDUEncoderTest(EncoderTest):
         pdu = AlertNotification(
             source_addr_ton=AddrTon.NATIONAL,
             source_addr_npi=AddrNpi.ISDN,
-            source_addr='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+            source_addr=b'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
             esme_addr_ton=AddrTon.INTERNATIONAL,
             esme_addr_npi=AddrNpi.LAND_MOBILE,
             esme_addr='YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY',
@@ -521,13 +521,13 @@ class PDUEncoderTest(EncoderTest):
 
     def test_SubmitSM_conversion(self):
         pdu = SubmitSM(9284,
-            service_type='',
+            service_type=b'',
             source_addr_ton=AddrTon.ALPHANUMERIC,
             source_addr_npi=AddrNpi.UNKNOWN,
-            source_addr='mobileway',
+            source_addr=b'mobileway',
             dest_addr_ton=AddrTon.INTERNATIONAL,
             dest_addr_npi=AddrNpi.ISDN,
-            destination_addr='1208230',
+            destination_addr=b'1208230',
             esm_class=EsmClass(EsmClassMode.DEFAULT, EsmClassType.DEFAULT),
             protocol_id=0,
             priority_flag=PriorityFlag.LEVEL_0,
@@ -541,13 +541,13 @@ class PDUEncoderTest(EncoderTest):
 
     def test_SubmitSM_ringtone_conversion(self):
         pdu = SubmitSM(455569,
-            service_type='',
+            service_type=b'',
             source_addr_ton=AddrTon.ALPHANUMERIC,
             source_addr_npi=AddrNpi.UNKNOWN,
-            source_addr='mobileway',
+            source_addr=b'mobileway',
             dest_addr_ton=AddrTon.INTERNATIONAL,
             dest_addr_npi=AddrNpi.ISDN,
-            destination_addr='3369809342',
+            destination_addr=b'3369809342',
             esm_class=EsmClass(EsmClassMode.DEFAULT, EsmClassType.DEFAULT, [EsmClassGsmFeatures.UDHI_INDICATOR_SET]),
             protocol_id=0,
             priority_flag=PriorityFlag.LEVEL_0,
@@ -612,6 +612,3 @@ class PDUEncoderTest(EncoderTest):
         pduExpected = BindTransceiverResp(3456, status=CommandStatus.ESME_RINVPASWD)
         self.assertEqual(0, len(pduExpected.params))
         self.do_decode_test(PDUEncoder(), pduExpected, hex)
-
-if __name__ == '__main__':
-    unittest.main()

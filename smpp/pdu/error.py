@@ -30,7 +30,7 @@ class SMPPClientConnectionCorruptedError(SMPPClientError):
 class SMPPClientSessionStateError(SMPPClientError):
     """Raised when illegal operations are attempted for the client's session state
     """
-    
+
 class SMPPTransactionError(SMPPError):
     """Raised for transaction errors
     """
@@ -38,7 +38,7 @@ class SMPPTransactionError(SMPPError):
         self.response = response
         self.request = request
         SMPPError.__init__(self, self.getErrorStr())
-        
+
     def getErrorStr(self):
         errCodeName = self.response.status._name_
         errCodeVal = constants.command_status_name_map[errCodeName]

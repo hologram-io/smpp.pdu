@@ -25,7 +25,7 @@ class IEncoder:
     def decode(self, file):
         """Takes file stream in and returns an object representing the type"""
         raise NotImplementedError()
-        
+
     def read(self, file, size):
         bytesRead = file.read(size)
         length = len(bytesRead)

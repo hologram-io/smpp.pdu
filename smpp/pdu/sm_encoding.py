@@ -25,13 +25,13 @@ ShortMessageString = namedtuple('ShortMessageString', 'bytes, unicode, udh')
 
 class SMStringEncoder:
     userDataHeaderEncoder = UserDataHeaderEncoder()
-        
+
     def decodeSM(self, pdu):
         data_coding = pdu.params['data_coding']
         #TODO - when to look for message_payload instead of short_message??
         (smBytes, udhBytes, smStrBytes) = self.splitSM(pdu)
         udh = self.decodeUDH(udhBytes)
-        
+
         if data_coding.scheme == DataCodingScheme.DEFAULT:
             unicodeStr = None
             if data_coding.schemeData == DataCodingDefault.SMSC_DEFAULT_ALPHABET:
@@ -44,36 +44,36 @@ class SMStringEncoder:
                 unicodeStr = str(smStrBytes, 'latin_1')
             if unicodeStr is not None:
                 return ShortMessageString(smBytes, unicodeStr, udh)
-                
+
         raise NotImplementedError("I don't know what to do!!! Data coding %s" % str(data_coding))
 
     def containsUDH(self, pdu):
         if EsmClassGsmFeatures.UDHI_INDICATOR_SET in pdu.params['esm_class'].gsmFeatures:
             return True
         return False
-        
+
     def isConcatenatedSM(self, pdu):
         return self.getConcatenatedSMInfoElement(pdu) != None
-        
+
     def getConcatenatedSMInfoElement(self, pdu):
         (smBytes, udhBytes, smStrBytes) = self.splitSM(pdu)
         udh = self.decodeUDH(udhBytes)
         if udh is None:
             return None
         return self.findConcatenatedSMInfoElement(udh)
-        
+
     def findConcatenatedSMInfoElement(self, udh):
         iElems = [iElem for iElem in udh if iElem.identifier in (InformationElementIdentifier.CONCATENATED_SM_8BIT_REF_NUM, InformationElementIdentifier.CONCATENATED_SM_16BIT_REF_NUM)]
         assert len(iElems) <= 1
         if len(iElems) == 1:
             return iElems[0]
         return None
-                
+
     def decodeUDH(self, udhBytes):
         if udhBytes is not None:
             return self.userDataHeaderEncoder.decode(BytesIO(udhBytes))
         return None
-            
+
     def splitSM(self, pdu):
         short_message = pdu.params['short_message']
         if self.containsUDH(pdu):
@@ -87,4 +87,3 @@ class SMStringEncoder:
                 raise ValueError("Invalid header len (%d). Longer than short_message len (%d) + 1" % (headerLen, len(short_message)))
             return (short_message, short_message[:headerLen+1], short_message[headerLen+1:])
         return (short_message, None, short_message)
-    

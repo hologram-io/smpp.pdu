@@ -18,7 +18,7 @@ from smpp.pdu import smpp_time
 from datetime import datetime, timedelta
 
 class SMPPTimeTest(unittest.TestCase):
-    
+
     def test_parse_t(self):
         self.assertEqual(0, smpp_time.parse_t('0'))
         self.assertEqual('0', smpp_time.unparse_t(0))
@@ -26,7 +26,7 @@ class SMPPTimeTest(unittest.TestCase):
         self.assertEqual('9', smpp_time.unparse_t(9))
         self.assertRaises(ValueError, smpp_time.parse_t, 'a')
         self.assertRaises(ValueError, smpp_time.parse_t, '03')
-        
+
     def test_parse_nn(self):
         self.assertEqual(0, smpp_time.parse_nn('00'))
         self.assertEqual('00', smpp_time.unparse_nn(0))
@@ -34,7 +34,7 @@ class SMPPTimeTest(unittest.TestCase):
         self.assertEqual('48', smpp_time.unparse_nn(48))
         self.assertRaises(ValueError, smpp_time.parse_nn, '49')
         self.assertRaises(ValueError, smpp_time.parse_nn, '0')
-        
+
     def test_parse_relative(self):
         str = '020610233429000R'
         rel = smpp_time.parse(str)
@@ -46,7 +46,7 @@ class SMPPTimeTest(unittest.TestCase):
         self.assertEqual(34, rel.minutes)
         self.assertEqual(29, rel.seconds)
         self.assertEqual(str, smpp_time.unparse(rel))
-        
+
     def test_parse_relative_mins_only(self):
         str = '000000001000000R'
         rel = smpp_time.parse(str)
@@ -71,7 +71,7 @@ class SMPPTimeTest(unittest.TestCase):
         self.assertEqual(800000, dt.microsecond)
         self.assertEqual(None, dt.tzinfo)
         self.assertEqual(str, smpp_time.unparse(dt))
-        
+
     def test_parse_absolute_positive_offset(self):
         str = '070927233429848+'
         dt = smpp_time.parse(str)
@@ -84,7 +84,7 @@ class SMPPTimeTest(unittest.TestCase):
         self.assertEqual(800000, dt.microsecond)
         self.assertEqual(timedelta(hours=12), dt.tzinfo.utcoffset(None))
         self.assertEqual(str, smpp_time.unparse(dt))
-        
+
     def test_parse_absolute_negative_offset(self):
         str = '070927233429848-'
         dt = smpp_time.parse(str)
@@ -97,8 +97,4 @@ class SMPPTimeTest(unittest.TestCase):
         self.assertEqual(800000, dt.microsecond)
         self.assertEqual(timedelta(hours=-12), dt.tzinfo.utcoffset(None))
         self.assertEqual(str, smpp_time.unparse(dt))
-    
-    
-        
-if __name__ == '__main__':
-    unittest.main()
+
