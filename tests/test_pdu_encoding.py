@@ -36,7 +36,7 @@ class EncoderTest(unittest.TestCase):
                 if chars1[i] != chars2[i]:
                     print("Letter %d diff [%s] [%s]" % (i, chars1[i], chars2[i]))
 
-        self.assertEqual(hexdumpValue, hexEncoded)
+        self.assertEqual(hexdumpValue.encode(), hexEncoded)
         file = BytesIO(encoded)
         decoded = encoder.decode(file)
         self.assertEqual(value, decoded)
@@ -53,7 +53,7 @@ class EncoderTest(unittest.TestCase):
                 if chars1[i] != chars2[i]:
                     print("Letter %d diff [%s] [%s]" % (i, chars1[i], chars2[i]))
 
-        self.assertEqual(hexdumpValue, hexEncoded)
+        self.assertEqual(hexdumpValue.encode(), hexEncoded)
 
     def do_decode_test(self, encoder, value, hexdumpValue):
         decoded = self.decode(encoder.decode, hexdumpValue)
@@ -61,7 +61,7 @@ class EncoderTest(unittest.TestCase):
 
     def do_null_encode_test(self, encoder, nullDecodeVal, hexdumpValue):
         encoded = encoder.encode(None)
-        self.assertEqual(hexdumpValue, binascii.b2a_hex(encoded))
+        self.assertEqual(hexdumpValue.encode(), binascii.b2a_hex(encoded))
         file = BytesIO(encoded)
         decoded = encoder.decode(file)
         self.assertEqual(nullDecodeVal, decoded)
