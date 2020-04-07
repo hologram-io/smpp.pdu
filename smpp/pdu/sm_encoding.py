@@ -79,7 +79,10 @@ class SMStringEncoder:
         if self.containsUDH(pdu):
             if len(short_message) == 0:
                 raise ValueError("Empty short message")
-            headerLen = struct.unpack('!B', short_message[0])[0]
+            if isinstance(short_message[0], bytes):
+                headerLen = struct.unpack('!B', short_message[0])[0]
+            else:
+                headerLen = struct.unpack('!B', bytes([short_message[0]]))[0]
             if headerLen + 1 > len(short_message):
                 raise ValueError("Invalid header len (%d). Longer than short_message len (%d) + 1" % (headerLen, len(short_message)))
             return (short_message, short_message[:headerLen+1], short_message[headerLen+1:])
