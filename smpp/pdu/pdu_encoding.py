@@ -251,10 +251,11 @@ class IntegerWrapperEncoder(PDUNullableFieldEncoder):
         self.decodeErrorStatus = kwargs.get('decodeErrorStatus', self.decodeErrorStatus)
 
     def _encode(self, value):
-        name = str(value)
-        if name not in self.nameMap:
-            raise ValueError("Unknown %s name %s" % (self.fieldName, name))
-        intVal = self.nameMap[name]
+        # _name_ gets the str name value of an enum
+        # https://docs.python.org/3/library/enum.html#supported-sunder-names
+        if value._name_ not in self.nameMap:
+            raise ValueError("Unknown %s name %s" % (self.fieldName, value._name_))
+        intVal = self.nameMap[value._name_]
         return self.encoder.encode(intVal)
 
     def _read(self, file):
@@ -306,10 +307,11 @@ class CommandStatusEncoder(Int4Encoder):
     nullable = False
 
     def _encode(self, value):
-        name = str(value)
-        if name not in constants.command_status_name_map:
-            raise ValueError("Unknown command_status name %s" % name)
-        intval = constants.command_status_name_map[name]
+        # _name_ gets the str name value of an enum
+        # https://docs.python.org/3/library/enum.html#supported-sunder-names
+        if value._name_ not in constants.command_status_name_map:
+            raise ValueError("Unknown command_status name %s" % value._name_)
+        intval = constants.command_status_name_map[value._name_]
         return Int4Encoder().encode(intval)
 
     def _decode(self, bytes):

@@ -48,10 +48,11 @@ class InformationElementIdentifierEncoder(IEncoder):
     valueMap = gsm_constants.information_element_identifier_value_map
     
     def encode(self, value):
-        name = str(value)
-        if name not in self.nameMap:
-            raise ValueError("Unknown InformationElementIdentifier name %s" % name)
-        return self.int8Encoder.encode(self.nameMap[name])        
+        # _name_ gets the str name value of an enum
+        # https://docs.python.org/3/library/enum.html#supported-sunder-names
+        if value._name_ not in self.nameMap:
+            raise ValueError("Unknown InformationElementIdentifier name %s" % value._name_)
+        return self.int8Encoder.encode(self.nameMap[value._name_])        
 
     def decode(self, file):
         intVal = self.int8Encoder.decode(file)
