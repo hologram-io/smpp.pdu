@@ -469,7 +469,7 @@ class DataCodingEncoder(Int1Encoder):
         # Fix: compare Enum indexes (.index)
         if dataCoding.scheme.value == pdu_types.DataCodingScheme.RAW.value:
             return dataCoding.schemeData
-        if dataCoding.scheme/value == pdu_types.DataCodingScheme.DEFAULT.value:
+        if dataCoding.scheme.value == pdu_types.DataCodingScheme.DEFAULT.value:
             return self._encodeDefaultSchemeAsInt(dataCoding)
         return self._encodeSchemeAsInt(dataCoding)
 
