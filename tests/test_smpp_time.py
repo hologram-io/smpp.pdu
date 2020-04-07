@@ -36,8 +36,8 @@ class SMPPTimeTest(unittest.TestCase):
         self.assertRaises(ValueError, smpp_time.parse_nn, '0')
 
     def test_parse_relative(self):
-        str = '020610233429000R'
-        rel = smpp_time.parse(str)
+        tstr = b'020610233429000R'
+        rel = smpp_time.parse(tstr)
         self.assertEqual(smpp_time.SMPPRelativeTime, rel.__class__)
         self.assertEqual(2, rel.years)
         self.assertEqual(6, rel.months)
@@ -45,11 +45,11 @@ class SMPPTimeTest(unittest.TestCase):
         self.assertEqual(23, rel.hours)
         self.assertEqual(34, rel.minutes)
         self.assertEqual(29, rel.seconds)
-        self.assertEqual(str, smpp_time.unparse(rel))
+        self.assertEqual(tstr, smpp_time.unparse(rel))
 
     def test_parse_relative_mins_only(self):
-        str = '000000001000000R'
-        rel = smpp_time.parse(str)
+        tstr = b'000000001000000R'
+        rel = smpp_time.parse(tstr)
         self.assertEqual(smpp_time.SMPPRelativeTime, rel.__class__)
         self.assertEqual(0, rel.years)
         self.assertEqual(0, rel.months)
@@ -57,11 +57,11 @@ class SMPPTimeTest(unittest.TestCase):
         self.assertEqual(0, rel.hours)
         self.assertEqual(10, rel.minutes)
         self.assertEqual(0, rel.seconds)
-        self.assertEqual(str, smpp_time.unparse(rel))
+        self.assertEqual(tstr, smpp_time.unparse(rel))
 
     def test_parse_absolute_no_offset(self):
-        str = '070927233429800+'
-        dt = smpp_time.parse(str)
+        tstr = b'070927233429800+'
+        dt = smpp_time.parse(tstr)
         self.assertEqual(2007, dt.year)
         self.assertEqual(9, dt.month)
         self.assertEqual(27, dt.day)
@@ -70,11 +70,11 @@ class SMPPTimeTest(unittest.TestCase):
         self.assertEqual(29, dt.second)
         self.assertEqual(800000, dt.microsecond)
         self.assertEqual(None, dt.tzinfo)
-        self.assertEqual(str, smpp_time.unparse(dt))
+        self.assertEqual(tstr, smpp_time.unparse(dt))
 
     def test_parse_absolute_positive_offset(self):
-        str = '070927233429848+'
-        dt = smpp_time.parse(str)
+        tstr = b'070927233429848+'
+        dt = smpp_time.parse(tstr)
         self.assertEqual(2007, dt.year)
         self.assertEqual(9, dt.month)
         self.assertEqual(27, dt.day)
@@ -83,11 +83,11 @@ class SMPPTimeTest(unittest.TestCase):
         self.assertEqual(29, dt.second)
         self.assertEqual(800000, dt.microsecond)
         self.assertEqual(timedelta(hours=12), dt.tzinfo.utcoffset(None))
-        self.assertEqual(str, smpp_time.unparse(dt))
+        self.assertEqual(tstr, smpp_time.unparse(dt))
 
     def test_parse_absolute_negative_offset(self):
-        str = '070927233429848-'
-        dt = smpp_time.parse(str)
+        tstr = b'070927233429848-'
+        dt = smpp_time.parse(tstr)
         self.assertEqual(2007, dt.year)
         self.assertEqual(9, dt.month)
         self.assertEqual(27, dt.day)
@@ -96,5 +96,5 @@ class SMPPTimeTest(unittest.TestCase):
         self.assertEqual(29, dt.second)
         self.assertEqual(800000, dt.microsecond)
         self.assertEqual(timedelta(hours=-12), dt.tzinfo.utcoffset(None))
-        self.assertEqual(str, smpp_time.unparse(dt))
+        self.assertEqual(tstr, smpp_time.unparse(dt))
 

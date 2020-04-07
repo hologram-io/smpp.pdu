@@ -144,7 +144,7 @@ class OctetStringEncoderTest(EncoderTest):
     def test_conversion(self):
         hexstr = '68656c6c6f'
         self.do_conversion_test(OctetStringEncoder(int(len(hexstr)/2)), binascii.a2b_hex(hexstr), hexstr)
-        self.do_conversion_test(OctetStringEncoder(0), '', '')
+        self.do_conversion_test(OctetStringEncoder(0), b'', '')
 
     def test_maxLength_exceeded(self):
         encoder = OctetStringEncoder(1)

@@ -61,8 +61,11 @@ def unparse_nn(nn):
         raise ValueError("time difference must be 0-48")
     return '%02d' % nn
 
-def parse_absolute_time(str):
-    (YYMMDDhhmmss, t, nn, p) = (str[:12], str[12:13], str[13:15], str[15])
+def parse_absolute_time(tstr):
+    (YYMMDDhhmmss, t, nn, p) = (tstr[:12], tstr[12:13], tstr[13:15], tstr[15])
+
+    if isinstance(p, str):
+        p = p.encode()
 
     if p not in [b'+', b'-']:
         raise ValueError("Invalid offset indicator %s" % p)
