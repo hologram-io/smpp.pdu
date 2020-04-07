@@ -143,7 +143,7 @@ class PDU:
         # (tag:int, length:int|None, type:str, value:str/int)
         self.custom_tlvs = kwargs.pop('custom_tlvs', [])
         # format every string arg as a byte string
-        self.params = [arg if not isinstance(arg, str) else arg.encode() for arg in kwargs]
+        self.params = dict([(key, val.encode()) if isinstance(val, str) else (key, val) for (key, val) in kwargs])
 
         for mParam in self.mandatoryParams:
             if mParam not in self.params:
