@@ -36,10 +36,10 @@ class EncoderTest(unittest.TestCase):
                 if chars1[i] != chars2[i]:
                     print("Letter %d diff [%s] [%s]" % (i, chars1[i], chars2[i]))
 
-        self.assertEquals(hexdumpValue, hexEncoded)
+        self.assertEqual(hexdumpValue, hexEncoded)
         file = BytesIO(encoded)
         decoded = encoder.decode(file)
-        self.assertEquals(value, decoded)
+        self.assertEqual(value, decoded)
 
     def do_encode_test(self, encoder, value, hexdumpValue):
         encoded = encoder.encode(value)
@@ -53,18 +53,18 @@ class EncoderTest(unittest.TestCase):
                 if chars1[i] != chars2[i]:
                     print("Letter %d diff [%s] [%s]" % (i, chars1[i], chars2[i]))
 
-        self.assertEquals(hexdumpValue, hexEncoded)
+        self.assertEqual(hexdumpValue, hexEncoded)
 
     def do_decode_test(self, encoder, value, hexdumpValue):
         decoded = self.decode(encoder.decode, hexdumpValue)
-        self.assertEquals(value, decoded)
+        self.assertEqual(value, decoded)
 
     def do_null_encode_test(self, encoder, nullDecodeVal, hexdumpValue):
         encoded = encoder.encode(None)
-        self.assertEquals(hexdumpValue, binascii.b2a_hex(encoded))
+        self.assertEqual(hexdumpValue, binascii.b2a_hex(encoded))
         file = BytesIO(encoded)
         decoded = encoder.decode(file)
-        self.assertEquals(nullDecodeVal, decoded)
+        self.assertEqual(nullDecodeVal, decoded)
 
     def decode(self, decodeFunc, hexdumpValue):
         return decodeFunc(BytesIO(binascii.a2b_hex(hexdumpValue)))
@@ -74,14 +74,14 @@ class EncoderTest(unittest.TestCase):
             decoded = self.decode(decodeFunc, hexdumpValue)
             self.assertTrue(False, 'Decode did not throw exception. Result was: %s' % str(decoded))
         except PDUParseError as e:
-            self.assertEquals(status, e.status)
+            self.assertEqual(status, e.status)
 
     def do_decode_corrupt_data_error_test(self, decodeFunc, status, hexdumpValue):
         try:
             decoded = self.decode(decodeFunc, hexdumpValue)
             self.assertTrue(False, 'Decode did not throw exception. Result was: %s' % str(decoded))
         except PDUCorruptError as e:
-            self.assertEquals(status, e.status)
+            self.assertEqual(status, e.status)
 
 class EmptyEncoderTest(EncoderTest):
 
@@ -582,24 +582,24 @@ class PDUEncoderTest(EncoderTest):
     def test_SubmitSMResp_error_has_no_body(self):
         pdu = SubmitSMResp(1234, status=CommandStatus.ESME_RMSGQFUL)
         self.assertTrue(len(SubmitSMResp.mandatoryParams) > 0)
-        self.assertEquals(0, len(pdu.params))
+        self.assertEqual(0, len(pdu.params))
         self.do_conversion_test(PDUEncoder(), pdu, '000000108000000400000014000004d2')
 
     def test_BindReceiverResp_error_has_no_body(self):
         pdu = BindReceiverResp(3456, status=CommandStatus.ESME_RINVPASWD)
         self.assertTrue(len(BindReceiverResp.mandatoryParams) > 0)
-        self.assertEquals(0, len(pdu.params))
+        self.assertEqual(0, len(pdu.params))
         self.do_conversion_test(PDUEncoder(), pdu, '00000010800000010000000e00000d80')
 
     def test_BindTransmitterResp_error_has_no_body(self):
         pdu = BindTransmitterResp(3456, status=CommandStatus.ESME_RINVPASWD)
         self.assertTrue(len(BindTransmitterResp.mandatoryParams) > 0)
-        self.assertEquals(0, len(pdu.params))
+        self.assertEqual(0, len(pdu.params))
         self.do_conversion_test(PDUEncoder(), pdu, '00000010800000020000000e00000d80')
 
     def test_BindTransceiverResp_error_has_no_body(self):
         pdu = BindTransceiverResp(3456, status=CommandStatus.ESME_RINVPASWD)
-        self.assertEquals(0, len(pdu.params))
+        self.assertEqual(0, len(pdu.params))
         self.do_conversion_test(PDUEncoder(), pdu, '00000010800000090000000e00000d80')
 
     def test_BindTransceiverResp_error_has_no_body_status_set_later(self):
@@ -610,7 +610,7 @@ class PDUEncoderTest(EncoderTest):
         self.do_encode_test(PDUEncoder(), pdu, hex)
         #It will decode with no params set
         pduExpected = BindTransceiverResp(3456, status=CommandStatus.ESME_RINVPASWD)
-        self.assertEquals(0, len(pduExpected.params))
+        self.assertEqual(0, len(pduExpected.params))
         self.do_decode_test(PDUEncoder(), pduExpected, hex)
 
 if __name__ == '__main__':

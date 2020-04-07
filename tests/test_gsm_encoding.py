@@ -33,17 +33,17 @@ class EncoderTest(unittest.TestCase):
                 if chars1[i] != chars2[i]:
                     print("Letter %d diff [%s] [%s]" % (i, chars1[i], chars2[i]))
             
-        self.assertEquals(hexdumpValue, hexEncoded)
+        self.assertEqual(hexdumpValue, hexEncoded)
         file = BytesIO(encoded)
         decoded = encoder.decode(file)
-        self.assertEquals(value, decoded)
+        self.assertEqual(value, decoded)
         
     def do_null_encode_test(self, encoder, nullDecodeVal, hexdumpValue):
         encoded = encoder.encode(None)
-        self.assertEquals(hexdumpValue, binascii.b2a_hex(encoded))
+        self.assertEqual(hexdumpValue, binascii.b2a_hex(encoded))
         file = BytesIO(encoded)
         decoded = encoder.decode(file)
-        self.assertEquals(nullDecodeVal, decoded)
+        self.assertEqual(nullDecodeVal, decoded)
         
     def decode(self, decodeFunc, hexdumpValue):
         bytes = binascii.a2b_hex(hexdumpValue)
@@ -56,7 +56,7 @@ class EncoderTest(unittest.TestCase):
         except Exception as e:
             error = e
         # print("file index: %s" % file.tell())
-        self.assertEquals(len(bytes), file.tell())
+        self.assertEqual(len(bytes), file.tell())
         if error:
             raise error
         return decoded
@@ -88,9 +88,9 @@ class InformationElementEncoderTest(EncoderTest):
         
     def test_decode_unknown_identifier(self):
         decoded = self.decode(InformationElementEncoder().decode, '02049cfa0302')
-        self.assertEquals(None, decoded)
+        self.assertEqual(None, decoded)
         decoded = self.decode(InformationElementEncoder().decode, '0200')
-        self.assertEquals(None, decoded)
+        self.assertEqual(None, decoded)
         
     def test_invalid_length(self):
         self.do_decode_udh_parse_error_test(InformationElementEncoder().decode, '0002fa0302')  
@@ -105,12 +105,12 @@ class UserDataHeaderEncoderTest(EncoderTest):
     def test_decode_repeated_non_repeatable_element(self):
         udh = self.decode(UserDataHeaderEncoder().decode, '0c0804abcd030208049cfa0302')
         udhExpected = [InformationElement(InformationElementIdentifier.CONCATENATED_SM_16BIT_REF_NUM, IEConcatenatedSM(0x9CFA, 0x03, 0x02))]
-        self.assertEquals(udhExpected, udh)
+        self.assertEqual(udhExpected, udh)
         
     def test_decode_with_unknown_elements(self):
         udh = self.decode(UserDataHeaderEncoder().decode, '0f0203ffffff0201ff00032403010200')
         udhExpected = [InformationElement(InformationElementIdentifier.CONCATENATED_SM_8BIT_REF_NUM, IEConcatenatedSM(0x24, 0x03, 0x01))]
-        self.assertEquals(udhExpected, udh)
+        self.assertEqual(udhExpected, udh)
 
     def test_encode_repeated_non_repeatable_element(self):
         ie1 = InformationElement(InformationElementIdentifier.CONCATENATED_SM_16BIT_REF_NUM, IEConcatenatedSM(0x9CFA, 0x03, 0x02))
@@ -121,7 +121,7 @@ class UserDataHeaderEncoderTest(EncoderTest):
     def test_decode_mutually_exclusive_elements(self):
         udh = self.decode(UserDataHeaderEncoder().decode, '0b000324030108049cfa0302')
         udhExpected = [InformationElement(InformationElementIdentifier.CONCATENATED_SM_16BIT_REF_NUM, IEConcatenatedSM(0x9CFA, 0x03, 0x02))]
-        self.assertEquals(udhExpected, udh)
+        self.assertEqual(udhExpected, udh)
 
     def test_encode_mutually_exclusive_elements(self):
         ie1 = InformationElement(InformationElementIdentifier.CONCATENATED_SM_8BIT_REF_NUM, IEConcatenatedSM(0x24, 0x03, 0x01))
