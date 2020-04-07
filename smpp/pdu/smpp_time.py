@@ -64,15 +64,14 @@ def unparse_nn(nn):
 def parse_absolute_time(tstr):
     (YYMMDDhhmmss, t, nn, p) = (tstr[:12], tstr[12:13], tstr[13:15], tstr[15])
 
-    print(YYMMDDhhmmss)
-    print(t)
-    print(nn)
+    if isinstance(p, bytes):
+        p = p.decode('ascii')
+    elif isinstance(p, int):
+        p = chr(p)
+
     print(p)
 
-    if isinstance(p, str):
-        p = p.encode()
-
-    if p not in [b'+', b'-']:
+    if p not in ['+', '-']:
         raise ValueError("Invalid offset indicator %s" % p)
 
     tenthsOfSeconds = parse_t(t)
