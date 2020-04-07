@@ -503,9 +503,9 @@ class DataCodingEncoder(Int1Encoder):
         # Related to #182
         # When pdu is unpickled (from smpps or http api), the comparison below will always
         # be False since memory addresses of both objects are different.
-        # Using str() will get the comparison on the 'GSM_MESSAGE_CLASS' string value
+        # Using name will get the comparison on the 'GSM_MESSAGE_CLASS' string value
         #pylint: disable=no-member
-        if str(dataCoding.scheme) == str(pdu_types.DataCodingScheme.GSM_MESSAGE_CLASS):
+        if dataCoding.scheme._name == pdu_types.DataCodingScheme.GSM_MESSAGE_CLASS._name:
             return self._encodeGsmMsgSchemeDataAsInt(dataCoding)
         # Jasmin update:
         # As reported in https://github.com/mozes/smpp.pdu/issues/12
@@ -1156,7 +1156,7 @@ class PDUEncoder(IEncoder):
         iBefore = file.tell()
         while file.tell() - iBefore < optionsLength:
             option = self.optionEncoder.decode(file)
-            optionName = str(option.tag)
+            optionName = option.tag._name
 
             # Jasmin update:
             # Silently drop vendor_specific_bypass optional param
