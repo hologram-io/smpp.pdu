@@ -17,7 +17,7 @@ Copyright 2009-2010 Mozes, Inc.
 Updated code parts are marked with "Jasmin update" comment
 """
 from enum import Enum
-from smpp.pdu.namedtuple import namedtuple
+from collections import namedtuple
 from smpp.pdu import constants
 
 CommandId = Enum('CommandId',  list(constants.command_id_name_map.keys()))

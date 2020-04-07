@@ -14,7 +14,7 @@ Copyright 2009-2010 Mozes, Inc.
    limitations under the License.
 """
 from enum import Enum
-from smpp.pdu.namedtuple import namedtuple
+from collections import namedtuple
 from smpp.pdu import gsm_constants
 
 InformationElementIdentifier = Enum('InformationElementIdentifier', list(gsm_constants.information_element_identifier_name_map.keys()))

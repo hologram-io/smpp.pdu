@@ -15,7 +15,7 @@ Copyright 2009-2010 Mozes, Inc.
 """
 
 from datetime import datetime, tzinfo, timedelta
-from smpp.pdu.namedtuple import namedtuple
+from collections import namedtuple
 
 class FixedOffset(tzinfo):
     """Fixed offset in minutes east from UTC."""

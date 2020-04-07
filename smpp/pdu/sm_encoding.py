@@ -17,7 +17,7 @@ from io import BytesIO
 import struct
 from smpp.pdu.operations import DeliverSM, DataSM
 from smpp.pdu.pdu_types import DataCodingDefault, DataCodingScheme, EsmClassGsmFeatures
-from smpp.pdu.namedtuple import namedtuple
+from collections import namedtuple
 from smpp.pdu.gsm_types import InformationElementIdentifier
 from smpp.pdu.gsm_encoding import UserDataHeaderEncoder
 
