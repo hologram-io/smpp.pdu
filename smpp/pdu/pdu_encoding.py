@@ -193,10 +193,12 @@ class OctetStringEncoder(PDUNullableFieldEncoder):
         if self.getSize() is None:
             raise AssertionError("Missing size to decode")
         if self.getSize() == 0:
-            return ''
+            return b''
         return self.read(file, self.getSize())
 
     def _decode(self, dec_bytes):
+        if isinstance(dec_bytes, str):
+            return dec_bytes.encode()
         return dec_bytes
 
 

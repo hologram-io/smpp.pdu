@@ -122,14 +122,14 @@ def unparse_absolute_time(dt):
         if quarterHrOffset < 0:
             p = b'-'
             quarterHrOffset *= -1
-    return YYMMDDhhmmss + unparse_t(tenthsOfSeconds) + unparse_nn(quarterHrOffset) + p
+    return (YYMMDDhhmmss + unparse_t(tenthsOfSeconds) + unparse_nn(quarterHrOffset)).encode() + p
 
 def unparse_relative_time(rel):
     if not isinstance(rel, SMPPRelativeTime):
         raise ValueError("input must be a SMPPRelativeTime")
     relstr = "%s%s%s%s%s%s000R" % (str("%.2d" % rel.years), str("%.2d" % rel.months), str("%.2d" % rel.days), str("%.2d" % rel.hours), str("%.2d" % rel.minutes), str("%.2d" % rel.seconds))
 
-    return relstr
+    return relstr.encode()
 
 def parse(t_str):
     """Takes an SMPP time string in.
