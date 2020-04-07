@@ -142,7 +142,8 @@ class PDU:
         # TLV format
         # (tag:int, length:int|None, type:str, value:str/int)
         self.custom_tlvs = kwargs.pop('custom_tlvs', [])
-        self.params = kwargs
+        # format every string arg as a byte string
+        self.params = [arg if not isinstance(arg, str) else arg.encode() for arg in kwargs]
 
         for mParam in self.mandatoryParams:
             if mParam not in self.params:

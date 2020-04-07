@@ -821,7 +821,7 @@ class ShortMessageEncoder(IEncoder):
 
     def encode(self, shortMessage):
         if shortMessage is None:
-            shortMessage = ''
+            shortMessage = b''
         smLength = len(shortMessage)
 
         return self.smLengthEncoder.encode(smLength) + OctetStringEncoder(smLength).encode(shortMessage)

@@ -312,17 +312,17 @@ class SubaddressEncoderTest(EncoderTest):
 class TimeEncoderEncoderTest(EncoderTest):
 
     def test_conversion(self):
-        self.do_conversion_test(TimeEncoder(), datetime(2007, 9, 27, 23, 34, 29, 800000), binascii.b2a_hex(b'070927233429800+' + b'\0'))
+        self.do_conversion_test(TimeEncoder(), datetime(2007, 9, 27, 23, 34, 29, 800000), binascii.b2a_hex(b'070927233429800+' + b'\0').decode())
         self.do_conversion_test(TimeEncoder(), None, '00')
 
     def test_requireNull(self):
         encoder = TimeEncoder(requireNull=True)
         self.do_conversion_test(encoder, None, '00')
         self.assertRaises(ValueError, encoder.encode, datetime.now())
-        self.do_decode_parse_error_test(encoder.decode, CommandStatus.ESME_RUNKNOWNERR, binascii.b2a_hex(b'070927233429800+' + b'\0'))
+        self.do_decode_parse_error_test(encoder.decode, CommandStatus.ESME_RUNKNOWNERR, binascii.b2a_hex(b'070927233429800+' + b'\0').decode())
 
     def test_decode_invalid(self):
-        self.do_decode_parse_error_test(TimeEncoder(decodeErrorStatus=CommandStatus.ESME_RINVSRCADR).decode, CommandStatus.ESME_RINVSRCADR, binascii.b2a_hex(b'070927233429800' + b'\0'))
+        self.do_decode_parse_error_test(TimeEncoder(decodeErrorStatus=CommandStatus.ESME_RINVSRCADR).decode, CommandStatus.ESME_RINVSRCADR, binascii.b2a_hex(b'070927233429800' + b'\0').decode())
 
 class ShortMessageEncoderTest(EncoderTest):
 
