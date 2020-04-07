@@ -65,7 +65,9 @@ class SMPPProtocolError(SMPPError):
         SMPPError.__init__(self, "%s: %s" % (self.getStatusDescription(), errStr))
 
     def getStatusDescription(self):
-        intVal = constants.command_status_name_map[str(self.status)]
+        # _name_ gets the str name value of an enum
+        # https://docs.python.org/3/library/enum.html#supported-sunder-names
+        intVal = constants.command_status_name_map[self.status._name_]
         return constants.command_status_value_map[intVal]['description']
 
 class SessionStateError(SMPPProtocolError):
