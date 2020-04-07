@@ -88,15 +88,15 @@ class PDUNullableFieldEncoder(IEncoder):
         return self._encode(value)
 
     def decode(self, file):
-        bytes = self._read(file)
+        dec_bytes = self._read(file)
         if self.decodeNull:
             if self.nullHex is None:
                 raise NotImplementedError("No value for null")
-            if self.nullHex == binascii.b2a_hex(bytes):
+            if self.nullHex == binascii.b2a_hex(dec_bytes):
                 return None
             if self.requireNull:
                 raise PDUParseError("Field must be null", pdu_types.CommandStatus.ESME_RUNKNOWNERR)
-        return self._decode(bytes)
+        return self._decode(dec_bytes)
 
     def _encode(self, value):
         """Takes an object representing the type and returns a byte string"""
@@ -638,7 +638,7 @@ class CallbackNumEncoder(OctetStringEncoder):
     npiEncoder = AddrNpiEncoder()
 
     def _encode(self, callbackNum):
-        encoded = ''
+        encoded = b''
         encoded += self.digitModeIndicatorEncoder._encode(callbackNum.digitModeIndicator)
         encoded += self.tonEncoder._encode(callbackNum.ton)
         encoded += self.npiEncoder._encode(callbackNum.npi)
@@ -671,7 +671,7 @@ class SubaddressEncoder(OctetStringEncoder):
     typeTagEncoder = SubaddressTypeTagEncoder()
 
     def _encode(self, subaddress):
-        encoded = ''
+        encoded = b''
         encoded += self.typeTagEncoder._encode(subaddress.typeTag)
         valSize = self.getSize() - 1 if self.getSize() is not None else None
         encoded += OctetStringEncoder(valSize)._encode(subaddress.value)

@@ -39,8 +39,8 @@ class Int16Encoder(IEncoder):
         return struct.pack('!H', value)
 
     def decode(self, file):
-        bytes = self.read(file, 2)
-        return struct.unpack('!H', bytes)[0]
+        dec_bytes = self.read(file, 2)
+        return struct.unpack('!H', dec_bytes)[0]
 
 class InformationElementIdentifierEncoder(IEncoder):
     int8Encoder = Int8Encoder()
@@ -70,14 +70,14 @@ class IEConcatenatedSMEncoder(IEncoder):
         self.is16bitRefNum = is16bitRefNum
     
     def encode(self, cms):
-        bytes = b''
+        enc_bytes = b''
         if self.is16bitRefNum:
-            bytes += self.int16Encoder.encode(cms.referenceNum)
+            enc_bytes += self.int16Encoder.encode(cms.referenceNum)
         else:
-            bytes += self.int8Encoder.encode(cms.referenceNum)
-        bytes += self.int8Encoder.encode(cms.maximumNum)
-        bytes += self.int8Encoder.encode(cms.sequenceNum)
-        return bytes
+            enc_bytes += self.int8Encoder.encode(cms.referenceNum)
+        enc_bytes += self.int8Encoder.encode(cms.maximumNum)
+        enc_bytes += self.int8Encoder.encode(cms.sequenceNum)
+        return enc_bytes
 
     def decode(self, file):
         refNum = None
@@ -105,11 +105,11 @@ class InformationElementEncoder(IEncoder):
             dataBytes = iElement.data
         length = len(dataBytes)
             
-        bytes = b''
-        bytes += self.iEIEncoder.encode(iElement.identifier)
-        bytes += self.int8Encoder.encode(length)
-        bytes += dataBytes
-        return bytes
+        enc_bytes = b''
+        enc_bytes += self.iEIEncoder.encode(iElement.identifier)
+        enc_bytes += self.int8Encoder.encode(length)
+        enc_bytes += dataBytes
+        return enc_bytes
 
     def decode(self, file):
         fStart = file.tell()
@@ -175,7 +175,7 @@ class UserDataHeaderEncoder(IEncoder):
                         if identifier in nonRepeatable:
                             del nonRepeatable[identifier]
             bytesRead = file.tell() - iStart
-        return repeatable + nonRepeatable.values()
+        return repeatable + list(nonRepeatable.values())
         
     def isIdentifierRepeatable(self, identifier):
         return gsm_constants.information_element_identifier_full_value_map[gsm_constants.information_element_identifier_name_map[identifier._name_]]['repeatable']

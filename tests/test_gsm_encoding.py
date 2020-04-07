@@ -36,7 +36,7 @@ class EncoderTest(unittest.TestCase):
         self.assertEqual(hexdumpValue.encode(), hexEncoded)
         file = BytesIO(encoded)
         decoded = encoder.decode(file)
-        self.assertEqual(value, decoded)
+        self.assertEqual(value.encode(), decoded)
         
     def do_null_encode_test(self, encoder, nullDecodeVal, hexdumpValue):
         encoded = encoder.encode(None)
