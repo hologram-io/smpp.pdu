@@ -64,7 +64,7 @@ def unparse_nn(nn):
 def parse_absolute_time(str):
     (YYMMDDhhmmss, t, nn, p) = (str[:12], str[12:13], str[13:15], str[15])
 
-    if p not in ['+', '-']:
+    if p not in [b'+', b'-']:
         raise ValueError("Invalid offset indicator %s" % p)
 
     tenthsOfSeconds = parse_t(t)
@@ -75,7 +75,7 @@ def parse_absolute_time(str):
     tzinfo = None
     if quarterHrOffset > 0:
         minOffset = quarterHrOffset * 15
-        if p == '-':
+        if p == b'-':
             minOffset *= -1
         tzinfo = FixedOffset(minOffset, None)
 
@@ -114,13 +114,13 @@ def unparse_absolute_time(dt):
     YYMMDDhhmmss = unparse_YYMMDDhhmmss(dt)
     tenthsOfSeconds = dt.microsecond/(100*1000)
     quarterHrOffset = 0
-    p = '+'
+    p = b'+'
     if dt.tzinfo is not None:
         utcOffset = dt.tzinfo.utcoffset(datetime.now())
         utcOffsetSecs = utcOffset.days * 60 * 60 * 24 + utcOffset.seconds
         quarterHrOffset =  utcOffsetSecs / (15*60)
         if quarterHrOffset < 0:
-            p = '-'
+            p = b'-'
             quarterHrOffset *= -1
     return YYMMDDhhmmss + unparse_t(tenthsOfSeconds) + unparse_nn(quarterHrOffset) + p
 
@@ -131,17 +131,17 @@ def unparse_relative_time(rel):
 
     return relstr
 
-def parse(str):
+def parse(t_str):
     """Takes an SMPP time string in.
     Returns datetime.datetime for absolute time format
     Returns SMPPRelativeTime for relative time format (note: datetime.timedelta cannot
     because the SMPP relative time interval depends on the SMSC current date/time)
     """
-    if len(str) != 16:
-        raise ValueError("Invalid time length %d" % len(str))
-    if (str[-1]) == 'R':
-        return parse_relative_time(str)
-    return parse_absolute_time(str)
+    if len(t_str) != 16:
+        raise ValueError("Invalid time length %d" % len(t_str))
+    if (t_str[-1]) == b'R':
+        return parse_relative_time(t_str)
+    return parse_absolute_time(t_str)
 
 def unparse(dt_or_rel):
     """Takes in either a datetime or an SMPPRelativeTime
