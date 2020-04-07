@@ -60,7 +60,7 @@ AddrNpi = Enum('AddrNpi', list(constants.addr_npi_name_map.keys()))
 PriorityFlag = Enum('PriorityFlag', list(constants.priority_flag_name_map.keys()))
 ReplaceIfPresentFlag = Enum('ReplaceIfPresentFlag', list(constants.replace_if_present_flap_name_map.keys()))
 
-DataCodingScheme = Enum('DataCodingScheme', f'RAW, DEFAULT, {list(constants.data_coding_scheme_name_map.keys())}')
+DataCodingScheme = Enum('DataCodingScheme', 'RAW, DEFAULT,' + ','.join(list(constants.data_coding_scheme_name_map.keys())))
 DataCodingDefault = Enum('DataCodingDefault', list(constants.data_coding_default_name_map.keys()))
 DataCodingGsmMsgCoding = Enum('DataCodingGsmMsgCoding', list(constants.data_coding_gsm_message_coding_name_map.keys()))
 DataCodingGsmMsgClass = Enum('DataCodingGsmMsgClass', list(constants.data_coding_gsm_message_class_name_map.keys()))
