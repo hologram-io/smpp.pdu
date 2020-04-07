@@ -496,6 +496,7 @@ class DataCodingEncoder(Int1Encoder):
         # When pdu is unpickled (from smpps or http api), the comparison below will always
         # be False since memory addresses of both objects are different.
         # Using str() will get the comparison on the 'GSM_MESSAGE_CLASS' string value
+        #pylint: disable no-member
         if str(dataCoding.scheme) == str(pdu_types.DataCodingScheme.GSM_MESSAGE_CLASS):
             return self._encodeGsmMsgSchemeDataAsInt(dataCoding)
         # Jasmin update:
@@ -539,6 +540,7 @@ class DataCodingEncoder(Int1Encoder):
             return intVal
         if scheme == pdu_types.DataCodingScheme.DEFAULT:
             return self._decodeDefaultSchemeData(intVal)
+        #pylint: disable no-member
         if scheme == pdu_types.DataCodingScheme.GSM_MESSAGE_CLASS:
             schemeDataVal = intVal & self.schemeDataMask
             return self._decodeGsmMsgSchemeData(schemeDataVal)
