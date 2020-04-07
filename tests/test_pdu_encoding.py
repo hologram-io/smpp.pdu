@@ -118,10 +118,10 @@ class IntegerEncoderTest(EncoderTest):
 class COctetStringEncoderTest(EncoderTest):
 
     def test_conversion(self):
-        self.do_conversion_test(COctetStringEncoder(), 'hello', '68656c6c6f00')
-        self.do_conversion_test(COctetStringEncoder(6), 'hello', '68656c6c6f00')
-        self.do_conversion_test(COctetStringEncoder(1), '', '00')
-        self.do_null_encode_test(COctetStringEncoder(), '', '00')
+        self.do_conversion_test(COctetStringEncoder(), b'hello', '68656c6c6f00')
+        self.do_conversion_test(COctetStringEncoder(6), b'hello', '68656c6c6f00')
+        self.do_conversion_test(COctetStringEncoder(1), b'', '00')
+        self.do_null_encode_test(COctetStringEncoder(), b'', '00')
         self.assertRaises(ValueError, COctetStringEncoder, 0)
 
     def test_maxLength_exceeded(self):
