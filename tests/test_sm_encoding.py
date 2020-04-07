@@ -30,7 +30,7 @@ class SMDecoderTest(unittest.TestCase):
         pduHex = b'000000480000000500000000dfd03a56415753424400010131353535313233343536370001013137373338323834303730000000000000000008000c00f10075014400ed00fc0073'
         pdu = self.getPDU(pduHex)
         smStr = SMStringEncoder().decodeSM(pdu)
-        self.assertEqual('\x00\xf1\x00u\x01D\x00\xed\x00\xfc\x00s', smStr.bytes)
+        self.assertEqual(b'\x00\xf1\x00u\x01D\x00\xed\x00\xfc\x00s', smStr.bytes)
         self.assertEqual(u'\xf1u\u0144\xed\xfcs', smStr.unicode)
         self.assertEqual(None, smStr.udh)
 
@@ -44,7 +44,7 @@ class SMDecoderTest(unittest.TestCase):
         pduHex = b'0000004200000005000000002a603d56415753424400010131353535313233343536370001013137373338323834303730000000000000000003000645737061f161'
         pdu = self.getPDU(pduHex)
         smStr = SMStringEncoder().decodeSM(pdu)
-        self.assertEqual('Espa\xf1a', smStr.bytes)
+        self.assertEqual(b'Espa\xf1a', smStr.bytes)
         self.assertEqual(u'Espa\xf1a', smStr.unicode)
         self.assertEqual(None, smStr.udh)
 
@@ -52,7 +52,7 @@ class SMDecoderTest(unittest.TestCase):
         pduHex = b'00000054000000050000000008c72a4154454c4550000101313535353535353535353500010131343034363635333431300000ff010000000001000e49732074686973206a757374696e0201000100020d000101'
         pdu = self.getPDU(pduHex)
         smStr = SMStringEncoder().decodeSM(pdu)
-        self.assertEqual('Is this justin', smStr.bytes)
+        self.assertEqual(b'Is this justin', smStr.bytes)
         self.assertEqual('Is this justin', smStr.unicode)
         self.assertEqual(None, smStr.udh)
 
@@ -65,7 +65,7 @@ class SMDecoderTest(unittest.TestCase):
         pduHex = b'000000da0000000500000000da4b62474652414e4300010131353535313233343536370001013134303436363533343130004000000000000000009e0500032403016869206a757374696e20686f772061726520796f753f204d79206e616d6520697320706570652069276d206672656e636820616e6420692077616e74656420746f2074656c6c20796f7520686f77206d7563682069206c6f766520796f752c20796f75206b6e6f7720796f75207361766564206d79206c69666520616e642069207265616c6c79207468616e6b20796f7520666f72207468'
         pdu = self.getPDU(pduHex)
         smStr = SMStringEncoder().decodeSM(pdu)
-        self.assertEqual("\x05\x00\x03$\x03\x01hi justin how are you? My name is pepe i'm french and i wanted to tell you how much i love you, you know you saved my life and i really thank you for th", smStr.bytes)
+        self.assertEqual(b"\x05\x00\x03$\x03\x01hi justin how are you? My name is pepe i'm french and i wanted to tell you how much i love you, you know you saved my life and i really thank you for th", smStr.bytes)
         self.assertEqual("hi justin how are you? My name is pepe i'm french and i wanted to tell you how much i love you, you know you saved my life and i really thank you for th", smStr.unicode)
         self.assertEqual([InformationElement(InformationElementIdentifier.CONCATENATED_SM_8BIT_REF_NUM, IEConcatenatedSM(0x24, 0x03, 0x01))], smStr.udh)
         
