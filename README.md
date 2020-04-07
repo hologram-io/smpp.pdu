@@ -16,7 +16,7 @@ Decoding (parsing) PDUs
     file = BytesIO(binary)
 
     pdu = PDUEncoder().decode(file)
-    print "PDU: %s" % pdu
+    print("PDU: %s" % pdu)
 
     # Prints the following:
     #
@@ -63,11 +63,11 @@ Creating and encoding PDUs
         data_coding=DataCoding(DataCodingScheme.GSM_MESSAGE_CLASS, DataCodingGsmMsg(DataCodingGsmMsgCoding.DEFAULT_ALPHABET, DataCodingGsmMsgClass.CLASS_2)),
         short_message='HELLO',
     )
-    print "PDU: %s" % pdu
+    print("PDU: %s" % pdu)
 
     binary = PDUEncoder().encode(pdu)
     hexStr = binascii.b2a_hex(binary)
-    print "HEX: %s" % hexStr
+    print("HEX: %s" % hexStr)
     
     # Prints the following:
     #

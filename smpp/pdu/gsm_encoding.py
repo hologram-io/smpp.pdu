@@ -31,7 +31,9 @@ class Int8Encoder(IEncoder):
 
     def decode(self, file):
         byte = self.read(file, 1)
-        return struct.unpack('!B', byte)[0]
+        if isinstance(byte, bytes):
+            return struct.unpack('!B', byte)[0]
+        return struct.unpack('!B', bytes([byte]))[0]
 
 class Int16Encoder(IEncoder):
     
@@ -40,7 +42,9 @@ class Int16Encoder(IEncoder):
 
     def decode(self, file):
         dec_bytes = self.read(file, 2)
-        return struct.unpack('!H', dec_bytes)[0]
+        if isinstance(dec_bytes, bytes):
+            return struct.unpack('!H', dec_bytes)[0]
+        return struct.unpack('!H', bytes([dec_bytes]))[0]
 
 class InformationElementIdentifierEncoder(IEncoder):
     int8Encoder = Int8Encoder()
