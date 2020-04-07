@@ -26,7 +26,7 @@ class EncoderTest(unittest.TestCase):
 
     def do_conversion_test(self, encoder, value, hexdumpValue):
         encoded = encoder.encode(value)
-        hexEncoded = binascii.b2a_hex(encoded)
+        hexEncoded = binascii.b2a_hex(encoded.decode())
         if hexdumpValue != hexEncoded:
             print("\nHex Value:\n%s" % hexdumpValue)
             print("Hex Encoded:\n%s" % hexEncoded)
@@ -39,11 +39,11 @@ class EncoderTest(unittest.TestCase):
         self.assertEqual(hexdumpValue.encode(), hexEncoded)
         file = BytesIO(encoded)
         decoded = encoder.decode(file)
-        self.assertEqual(value.encode(), decoded)
+        self.assertEqual(value, decoded)
 
     def do_encode_test(self, encoder, value, hexdumpValue):
         encoded = encoder.encode(value)
-        hexEncoded = binascii.b2a_hex(encoded)
+        hexEncoded = binascii.b2a_hex(encoded.decode())
         if hexdumpValue != hexEncoded:
             print("\nHex Value:\n%s" % hexdumpValue)
             print("Hex Encoded:\n%s" % hexEncoded)
@@ -57,11 +57,11 @@ class EncoderTest(unittest.TestCase):
 
     def do_decode_test(self, encoder, value, hexdumpValue):
         decoded = self.decode(encoder.decode, hexdumpValue)
-        self.assertEqual(value.encode(), decoded)
+        self.assertEqual(value, decoded)
 
     def do_null_encode_test(self, encoder, nullDecodeVal, hexdumpValue):
         encoded = encoder.encode(None)
-        self.assertEqual(hexdumpValue.encode(), binascii.b2a_hex(encoded))
+        self.assertEqual(hexdumpValue.encode(), binascii.b2a_hex(encoded.decode()))
         file = BytesIO(encoded)
         decoded = encoder.decode(file)
         self.assertEqual(nullDecodeVal, decoded)
@@ -142,8 +142,8 @@ class COctetStringEncoderTest(EncoderTest):
 class OctetStringEncoderTest(EncoderTest):
 
     def test_conversion(self):
-        hex = '68656c6c6f'
-        self.do_conversion_test(OctetStringEncoder(len(hex)/2), binascii.a2b_hex(hex), hex)
+        hexstr = '68656c6c6f'
+        self.do_conversion_test(OctetStringEncoder(int(len(hexstr)/2)), binascii.a2b_hex(hexstr), hexstr)
         self.do_conversion_test(OctetStringEncoder(0), '', '')
 
     def test_maxLength_exceeded(self):

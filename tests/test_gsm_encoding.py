@@ -23,7 +23,7 @@ class EncoderTest(unittest.TestCase):
     
     def do_conversion_test(self, encoder, value, hexdumpValue):
         encoded = encoder.encode(value)
-        hexEncoded = binascii.b2a_hex(encoded)
+        hexEncoded = binascii.b2a_hex(encoded.decode())
         if hexdumpValue != hexEncoded:
             print("\nHex Value:\n%s" % hexdumpValue)
             print("Hex Encoded:\n%s" % hexEncoded)
@@ -36,11 +36,11 @@ class EncoderTest(unittest.TestCase):
         self.assertEqual(hexdumpValue.encode(), hexEncoded)
         file = BytesIO(encoded)
         decoded = encoder.decode(file)
-        self.assertEqual(value.encode(), decoded)
+        self.assertEqual(value, decoded)
         
     def do_null_encode_test(self, encoder, nullDecodeVal, hexdumpValue):
         encoded = encoder.encode(None)
-        self.assertEqual(hexdumpValue.encode(), binascii.b2a_hex(encoded))
+        self.assertEqual(hexdumpValue.encode(), binascii.b2a_hex(encoded.decode()))
         file = BytesIO(encoded)
         decoded = encoder.decode(file)
         self.assertEqual(nullDecodeVal, decoded)
