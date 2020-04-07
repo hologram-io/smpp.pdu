@@ -356,9 +356,9 @@ class EsmClassEncoder(Int1Encoder):
     gsmFeaturesMask = 0xc0
 
     def _encode(self, esmClass):
-        modeName = str(esmClass.mode)
-        typeName = str(esmClass.type)
-        gsmFeatureNames = [str(f) for f in esmClass.gsmFeatures]
+        modeName = esmClass.mode._name_
+        typeName = esmClass.type._name_
+        gsmFeatureNames = [f._name_ for f in esmClass.gsmFeatures]
 
         if modeName not in constants.esm_class_mode_name_map:
             raise ValueError("Unknown esm_class mode name %s" % modeName)
@@ -407,8 +407,8 @@ class RegisteredDeliveryEncoder(Int1Encoder):
     intermediateNotificationMask = 0x10
 
     def _encode(self, registeredDelivery):
-        receiptName = str(registeredDelivery.receipt)
-        smeOriginatedAckNames = [str(a) for a in registeredDelivery.smeOriginatedAcks]
+        receiptName = registeredDelivery.receipt._name_
+        smeOriginatedAckNames = [a._name_ for a in registeredDelivery.smeOriginatedAcks]
 
         if receiptName not in constants.registered_delivery_receipt_name_map:
             raise ValueError("Unknown registered_delivery receipt name %s" % receiptName)
@@ -476,7 +476,7 @@ class DataCodingEncoder(Int1Encoder):
         return self._encodeSchemeAsInt(dataCoding)
 
     def _encodeDefaultSchemeAsInt(self, dataCoding):
-        defaultName = str(dataCoding.schemeData)
+        defaultName = dataCoding.schemeData._name_
         if defaultName not in constants.data_coding_default_name_map:
             raise ValueError("Unknown data_coding default name %s" % defaultName)
         return constants.data_coding_default_name_map[defaultName]
@@ -487,7 +487,7 @@ class DataCodingEncoder(Int1Encoder):
         return schemeVal | schemeDataVal
 
     def _encodeSchemeNameAsInt(self, dataCoding):
-        schemeName = str(dataCoding.scheme)
+        schemeName = dataCoding.scheme._name_
         if schemeName not in constants.data_coding_scheme_name_map:
             raise ValueError("Unknown data_coding scheme name %s" % schemeName)
         return constants.data_coding_scheme_name_map[schemeName]
@@ -508,8 +508,8 @@ class DataCodingEncoder(Int1Encoder):
         raise ValueError("Unknown data coding scheme %s" % dataCoding.scheme)
 
     def _encodeGsmMsgSchemeDataAsInt(self, dataCoding):
-        msgCodingName = str(dataCoding.schemeData.msgCoding)
-        msgClassName = str(dataCoding.schemeData.msgClass)
+        msgCodingName = dataCoding.schemeData.msgCoding._name_
+        msgClassName = dataCoding.schemeData.msgClass._name_
 
         if msgCodingName not in constants.data_coding_gsm_message_coding_name_map:
             raise ValueError("Unknown data_coding gsm msg coding name %s" % msgCodingName)

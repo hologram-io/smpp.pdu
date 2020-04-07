@@ -40,7 +40,7 @@ class SMPPTransactionError(SMPPError):
         SMPPError.__init__(self, self.getErrorStr())
         
     def getErrorStr(self):
-        errCodeName = str(self.response.status)
+        errCodeName = self.response.status._name_
         errCodeVal = constants.command_status_name_map[errCodeName]
         errCodeDesc = constants.command_status_value_map[errCodeVal]
         return '%s (%s)' % (errCodeName, errCodeDesc)

@@ -178,8 +178,8 @@ class UserDataHeaderEncoder(IEncoder):
         return repeatable + nonRepeatable.values()
         
     def isIdentifierRepeatable(self, identifier):
-        return gsm_constants.information_element_identifier_full_value_map[gsm_constants.information_element_identifier_name_map[str(identifier)]]['repeatable']
+        return gsm_constants.information_element_identifier_full_value_map[gsm_constants.information_element_identifier_name_map[identifier._name_]]['repeatable']
         
     def getIdentifierExclusionList(self, identifier):
-        nameList = gsm_constants.information_element_identifier_full_value_map[gsm_constants.information_element_identifier_name_map[str(identifier)]]['excludes']
+        nameList = gsm_constants.information_element_identifier_full_value_map[gsm_constants.information_element_identifier_name_map[identifier._name_]]['excludes']
         return [getattr(gsm_types.InformationElementIdentifier, name) for name in nameList]
