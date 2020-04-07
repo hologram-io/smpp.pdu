@@ -119,14 +119,6 @@ class IntegerBaseEncoder(PDUNullableFieldEncoder):
         4: '!L',
     }
 
-    # pylint: disable-msg=E0213
-    def assertFmtSizes(sizeFmtMap):
-        for (size, fmt) in sizeFmtMap.items():
-            assert struct.calcsize(fmt) == size
-
-    # Verify platform sizes match protocol
-    assertFmtSizes(sizeFmtMap)
-
     def __init__(self, **kwargs):
         PDUNullableFieldEncoder.__init__(self, **kwargs)
 
@@ -244,8 +236,8 @@ class COctetStringEncoder(PDUNullableFieldEncoder):
 
 class IntegerWrapperEncoder(PDUNullableFieldEncoder):
     fieldName = None
-    nameMap = None
-    valueMap = None
+    nameMap = {}
+    valueMap = {}
     encoder = None
     pduType = None
     decodeErrorClass = PDUParseError
