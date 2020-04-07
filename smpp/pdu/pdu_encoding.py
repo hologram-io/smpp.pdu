@@ -126,7 +126,7 @@ class IntegerBaseEncoder(PDUNullableFieldEncoder):
     def __init__(self, **kwargs):
         PDUNullableFieldEncoder.__init__(self, **kwargs)
 
-        self.nullHex = '00' * self.size
+        self.nullHex = b'00' * self.size
 
         self.max = 2 ** (8 * self.size) - 1
         self.min = 0
@@ -205,7 +205,7 @@ class OctetStringEncoder(PDUNullableFieldEncoder):
 
 
 class COctetStringEncoder(PDUNullableFieldEncoder):
-    nullHex = '00'
+    nullHex = b'00'
     decodeErrorClass = PDUParseError
     decodeErrorStatus = pdu_types.CommandStatus.ESME_RUNKNOWNERR
 
@@ -789,7 +789,7 @@ class MoreMessagesToSendEncoder(IntegerWrapperEncoder):
 
 
 class TimeEncoder(PDUNullableFieldEncoder):
-    nullHex = '00'
+    nullHex = b'00'
     decodeNull = True
     encoder = COctetStringEncoder(17)
     decodeErrorClass = PDUParseError
