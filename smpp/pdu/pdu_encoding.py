@@ -183,9 +183,11 @@ class OctetStringEncoder(PDUNullableFieldEncoder):
             if length != self.getSize():
                 raise ValueError("Value (%s) size %d does not match expected %d" % (value, length, self.getSize()))
 
-        if isinstance(value, bytes):
-            return value
-        return bytes([value])
+        if isinstance(value, int):
+            return bytes([value])
+        elif isinstance(value, str):
+            return value.encode()
+        return value
 
     def _read(self, file):
         if self.getSize() is None:
