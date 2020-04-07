@@ -467,9 +467,9 @@ class DataCodingEncoder(Int1Encoder):
         # to False even if the values are the same, this is because Enum object have
         # no right __eq__ to compare values
         # Fix: compare Enum indexes (.index)
-        if dataCoding.scheme.index == pdu_types.DataCodingScheme.RAW.index:
+        if dataCoding.scheme.value == pdu_types.DataCodingScheme.RAW.value:
             return dataCoding.schemeData
-        if dataCoding.scheme.index == pdu_types.DataCodingScheme.DEFAULT.index:
+        if dataCoding.scheme/value == pdu_types.DataCodingScheme.DEFAULT.value:
             return self._encodeDefaultSchemeAsInt(dataCoding)
         return self._encodeSchemeAsInt(dataCoding)
 

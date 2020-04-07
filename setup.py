@@ -17,10 +17,7 @@ setup(
     py_modules=["smpp.pdu"],
     include_package_data = True,
     package_data={'smpp.pdu': ['README.markdown']},
-    zip_safe = False,   
-    install_requires = [
-        'enum',
-    ],
+    zip_safe = False,
     test_suite = 'smpp.pdu.tests',
     classifiers=[
         "Development Status :: 5 - Production/Stable",
