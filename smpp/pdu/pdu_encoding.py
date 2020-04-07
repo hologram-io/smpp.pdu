@@ -106,7 +106,7 @@ class PDUNullableFieldEncoder(IEncoder):
         """Takes file stream in and returns raw bytes"""
         raise NotImplementedError()
 
-    def _decode(self, bytes):
+    def _decode(self, dec_bytes):
         """Takes bytes in and returns an object representing the type"""
         raise NotImplementedError()
 
@@ -147,8 +147,8 @@ class IntegerBaseEncoder(PDUNullableFieldEncoder):
     def _read(self, file):
         return self.read(file, self.size)
 
-    def _decode(self, bytes):
-        return struct.unpack(self.sizeFmtMap[self.size], bytes)[0]
+    def _decode(self, dec_bytes):
+        return struct.unpack(self.sizeFmtMap[self.size], bytes(dec_bytes))[0]
 
 
 class Int4Encoder(IntegerBaseEncoder):
@@ -181,7 +181,7 @@ class OctetStringEncoder(PDUNullableFieldEncoder):
             if length != self.getSize():
                 raise ValueError("Value (%s) size %d does not match expected %d" % (value, length, self.getSize()))
 
-        return value
+        return bytes(value)
 
     def _read(self, file):
         if self.getSize() is None:
@@ -190,8 +190,8 @@ class OctetStringEncoder(PDUNullableFieldEncoder):
             return ''
         return self.read(file, self.getSize())
 
-    def _decode(self, bytes):
-        return bytes
+    def _decode(self, dec_bytes):
+        return dec_bytes
 
 
 class COctetStringEncoder(PDUNullableFieldEncoder):
@@ -226,12 +226,12 @@ class COctetStringEncoder(PDUNullableFieldEncoder):
                 break
         return result
 
-    def _decode(self, bytes):
+    def _decode(self, dec_bytes):
         if self.maxSize is not None:
-            if len(bytes) > self.maxSize:
+            if len(dec_bytes) > self.maxSize:
                 errStr = "COctetString is longer than allowed maximum size (%d)" % (self.maxSize)
                 raise self.decodeErrorClass(errStr, self.decodeErrorStatus)
-        return bytes[:-1]
+        return dec_bytes[:-1]
 
 
 class IntegerWrapperEncoder(PDUNullableFieldEncoder):
@@ -261,8 +261,8 @@ class IntegerWrapperEncoder(PDUNullableFieldEncoder):
     def _read(self, file):
         return self.encoder._read(file)
 
-    def _decode(self, bytes):
-        intVal = self.encoder._decode(bytes)
+    def _decode(self, dec_bytes):
+        intVal = self.encoder._decode(dec_bytes)
 
         # Jasmin update: bypass vendor specific tags
         # Vendor specific tag is not supported by Jasmin but must
@@ -314,8 +314,8 @@ class CommandStatusEncoder(Int4Encoder):
         intval = constants.command_status_name_map[value._name_]
         return Int4Encoder().encode(intval)
 
-    def _decode(self, bytes):
-        intval = Int4Encoder()._decode(bytes)
+    def _decode(self, dec_bytes):
+        intval = Int4Encoder()._decode(dec_bytes)
         if intval not in constants.command_status_value_map:
             # Jasmin update:
             # as of Table 5-2: SMPP Error Codes
@@ -378,8 +378,8 @@ class EsmClassEncoder(Int1Encoder):
 
         return Int1Encoder().encode(intVal)
 
-    def _decode(self, bytes):
-        intVal = Int1Encoder()._decode(bytes)
+    def _decode(self, dec_bytes):
+        intVal = Int1Encoder()._decode(dec_bytes)
         modeVal = intVal & self.modeMask
         typeVal = intVal & self.typeMask
         gsmFeaturesVal = intVal & self.gsmFeaturesMask
@@ -429,8 +429,8 @@ class RegisteredDeliveryEncoder(Int1Encoder):
 
         return Int1Encoder().encode(intVal)
 
-    def _decode(self, bytes):
-        intVal = Int1Encoder()._decode(bytes)
+    def _decode(self, dec_bytes):
+        intVal = Int1Encoder()._decode(dec_bytes)
         receiptVal = intVal & self.receiptMask
         smeOriginatedAcksVal = intVal & self.smeOriginatedAcksMask
         intermediateNotificationVal = intVal & self.intermediateNotificationMask
@@ -520,8 +520,8 @@ class DataCodingEncoder(Int1Encoder):
         msgClassVal = constants.data_coding_gsm_message_class_name_map[msgClassName]
         return msgCodingVal | msgClassVal
 
-    def _decode(self, bytes):
-        intVal = Int1Encoder()._decode(bytes)
+    def _decode(self, dec_bytes):
+        intVal = Int1Encoder()._decode(dec_bytes)
         scheme = self._decodeScheme(intVal)
         schemeData = self._decodeSchemeData(scheme, intVal)
         return pdu_types.DataCoding(scheme, schemeData)
@@ -645,15 +645,15 @@ class CallbackNumEncoder(OctetStringEncoder):
         encoded += callbackNum.digits
         return encoded
 
-    def _decode(self, bytes):
-        if len(bytes) < 3:
-            raise PDUParseError("Invalid callback_num size %s" % len(bytes),
+    def _decode(self, dec_bytes):
+        if len(dec_bytes) < 3:
+            raise PDUParseError("Invalid callback_num size %s" % len(dec_bytes),
                                 pdu_types.CommandStatus.ESME_RINVOPTPARAMVAL)
 
-        digitModeIndicator = self.digitModeIndicatorEncoder._decode(bytes[0])
-        ton = self.tonEncoder._decode(bytes[1])
-        npi = self.npiEncoder._decode(bytes[2])
-        digits = bytes[3:]
+        digitModeIndicator = self.digitModeIndicatorEncoder._decode(dec_bytes[0])
+        ton = self.tonEncoder._decode(dec_bytes[1])
+        npi = self.npiEncoder._decode(dec_bytes[2])
+        digits = dec_bytes[3:]
         return pdu_types.CallbackNum(digitModeIndicator, ton, npi, digits)
 
 
@@ -677,16 +677,16 @@ class SubaddressEncoder(OctetStringEncoder):
         encoded += OctetStringEncoder(valSize)._encode(subaddress.value)
         return encoded
 
-    def _decode(self, bytes):
-        if len(bytes) < 2:
-            raise PDUParseError("Invalid subaddress size %s" % len(bytes), pdu_types.CommandStatus.ESME_RINVOPTPARAMVAL)
+    def _decode(self, dec_bytes):
+        if len(dec_bytes) < 2:
+            raise PDUParseError("Invalid subaddress size %s" % len(dec_bytes), pdu_types.CommandStatus.ESME_RINVOPTPARAMVAL)
 
         try:
-            typeTag = self.typeTagEncoder._decode(bytes[0])
+            typeTag = self.typeTagEncoder._decode(dec_bytes[0])
         except PDUParseError as e:
             typeTag = 'RESERVED'
 
-        value = OctetStringEncoder(self.getSize() - 1)._decode(bytes[1:])
+        value = OctetStringEncoder(self.getSize() - 1)._decode(dec_bytes[1:])
         return pdu_types.Subaddress(typeTag, value)
 
 
@@ -798,8 +798,8 @@ class TimeEncoder(PDUNullableFieldEncoder):
     def _read(self, file):
         return self.encoder._read(file)
 
-    def _decode(self, bytes):
-        timeStr = self.encoder._decode(bytes)
+    def _decode(self, dec_bytes):
+        timeStr = self.encoder._decode(dec_bytes)
         try:
             return smpp_time.parse(timeStr)
         except Exception as e:

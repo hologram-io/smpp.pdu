@@ -283,7 +283,7 @@ class CallbackNumDigitModeIndicatorEncoderTest(EncoderTest):
 class CallbackNumEncoderTest(EncoderTest):
 
     def test_conversion(self):
-        self.do_conversion_test(CallbackNumEncoder(13), CallbackNum(CallbackNumDigitModeIndicator.ASCII, digits='8033237457'), '01000038303333323337343537')
+        self.do_conversion_test(CallbackNumEncoder(13), CallbackNum(CallbackNumDigitModeIndicator.ASCII, digits=b'8033237457'), '01000038303333323337343537')
 
     def test_decode_invalid_type(self):
         self.do_decode_parse_error_test(CallbackNumEncoder(13).decode, CommandStatus.ESME_RINVOPTPARAMVAL, '02000038303333323337343537')
