@@ -13,21 +13,24 @@ Copyright 2009-2010 Mozes, Inc.
    See the License for the specific language governing permissions and
    limitations under the License.
 """
+"""
+Updated code parts are marked with "Jasmin update" comment
+"""
 from enum import Enum
 from smpp.pdu.namedtuple import namedtuple
 from smpp.pdu import constants
 
-CommandId = Enum(*constants.command_id_name_map.keys())
+CommandId = Enum(*list(constants.command_id_name_map.keys()))
 
-CommandStatus = Enum(*constants.command_status_name_map.keys())
+CommandStatus = Enum(*list(constants.command_status_name_map.keys()))
 
-Tag = Enum(*constants.tag_name_map.keys())
+Tag = Enum(*list(constants.tag_name_map.keys()))
 
 Option = namedtuple('Option', 'tag, value')
 
-EsmClassMode = Enum(*constants.esm_class_mode_name_map.keys())
-EsmClassType = Enum(*constants.esm_class_type_name_map.keys())
-EsmClassGsmFeatures = Enum(*constants.esm_class_gsm_features_name_map.keys())
+EsmClassMode = Enum(*list(constants.esm_class_mode_name_map.keys()))
+EsmClassType = Enum(*list(constants.esm_class_type_name_map.keys()))
+EsmClassGsmFeatures = Enum(*list(constants.esm_class_gsm_features_name_map.keys()))
 
 EsmClassBase = namedtuple('EsmClass', 'mode, type, gsmFeatures')
 
@@ -39,8 +42,8 @@ class EsmClass(EsmClassBase):
     def __repr__(self):
         return 'EsmClass[mode: %s, type: %s, gsmFeatures: %s]' % (self.mode, self.type, self.gsmFeatures)
 
-RegisteredDeliveryReceipt = Enum(*constants.registered_delivery_receipt_name_map.keys())
-RegisteredDeliverySmeOriginatedAcks = Enum(*constants.registered_delivery_sme_originated_acks_name_map.keys())
+RegisteredDeliveryReceipt = Enum(*list(constants.registered_delivery_receipt_name_map.keys()))
+RegisteredDeliverySmeOriginatedAcks = Enum(*list(constants.registered_delivery_sme_originated_acks_name_map.keys()))
 
 RegisteredDeliveryBase = namedtuple('RegisteredDelivery', 'receipt, smeOriginatedAcks, intermediateNotification')
 
@@ -52,15 +55,15 @@ class RegisteredDelivery(RegisteredDeliveryBase):
     def __repr__(self):
         return 'RegisteredDelivery[receipt: %s, smeOriginatedAcks: %s, intermediateNotification: %s]' % (self.receipt, self.smeOriginatedAcks, self.intermediateNotification)
 
-AddrTon = Enum(*constants.addr_ton_name_map.keys())
-AddrNpi = Enum(*constants.addr_npi_name_map.keys())
-PriorityFlag = Enum(*constants.priority_flag_name_map.keys())
-ReplaceIfPresentFlag = Enum(*constants.replace_if_present_flap_name_map.keys())
+AddrTon = Enum(*list(constants.addr_ton_name_map.keys()))
+AddrNpi = Enum(*list(constants.addr_npi_name_map.keys()))
+PriorityFlag = Enum(*list(constants.priority_flag_name_map.keys()))
+ReplaceIfPresentFlag = Enum(*list(constants.replace_if_present_flap_name_map.keys()))
 
-DataCodingScheme = Enum('RAW', 'DEFAULT', *constants.data_coding_scheme_name_map.keys())
-DataCodingDefault = Enum(*constants.data_coding_default_name_map.keys())
-DataCodingGsmMsgCoding = Enum(*constants.data_coding_gsm_message_coding_name_map.keys())
-DataCodingGsmMsgClass = Enum(*constants.data_coding_gsm_message_class_name_map.keys())
+DataCodingScheme = Enum('RAW', 'DEFAULT', *list(constants.data_coding_scheme_name_map))
+DataCodingDefault = Enum(*list(constants.data_coding_default_name_map.keys()))
+DataCodingGsmMsgCoding = Enum(*list(constants.data_coding_gsm_message_coding_name_map.keys()))
+DataCodingGsmMsgClass = Enum(*list(constants.data_coding_gsm_message_class_name_map.keys()))
 
 DataCodingGsmMsgBase = namedtuple('DataCodingGsmMsg', 'msgCoding, msgClass')
 
@@ -73,7 +76,7 @@ class DataCodingGsmMsg(DataCodingGsmMsgBase):
         return 'DataCodingGsmMsg[msgCoding: %s, msgClass: %s]' % (self.msgCoding, self.msgClass)
 
 
-class DataCoding(object):
+class DataCoding:
     
     def __init__(self, scheme=DataCodingScheme.DEFAULT, schemeData=DataCodingDefault.SMSC_DEFAULT_ALPHABET):
         self.scheme = scheme
@@ -92,10 +95,10 @@ class DataCoding(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-DestFlag = Enum(*constants.dest_flag_name_map.keys())
-MessageState = Enum(*constants.message_state_name_map.keys())
-CallbackNumDigitModeIndicator = Enum(*constants.callback_num_digit_mode_indicator_name_map.keys())
-SubaddressTypeTag = Enum(*constants.subaddress_type_tag_name_map.keys())
+DestFlag = Enum(*list(constants.dest_flag_name_map.keys()))
+MessageState = Enum(*list(constants.message_state_name_map.keys()))
+CallbackNumDigitModeIndicator = Enum(*list(constants.callback_num_digit_mode_indicator_name_map.keys()))
+SubaddressTypeTag = Enum(*list(constants.subaddress_type_tag_name_map.keys()))
 
 CallbackNumBase = namedtuple('CallbackNum', 'digitModeIndicator, ton, npi, digits')
 class CallbackNum(CallbackNumBase):
@@ -115,18 +118,19 @@ class Subaddress(SubaddressBase):
     def __repr__(self):
         return 'Subaddress[typeTag: %s, value: %s]' % (self.typeTag, self.value)
 
-AddrSubunit = Enum(*constants.addr_subunit_name_map.keys())
-NetworkType = Enum(*constants.network_type_name_map.keys())
-BearerType = Enum(*constants.bearer_type_name_map.keys())
-PayloadType = Enum(*constants.payload_type_name_map.keys())
-PrivacyIndicator = Enum(*constants.privacy_indicator_name_map.keys())
-LanguageIndicator = Enum(*constants.language_indicator_name_map.keys())
-DisplayTime = Enum(*constants.display_time_name_map.keys())
-MsAvailabilityStatus = Enum(*constants.ms_availability_status_name_map.keys())
-DeliveryFailureReason = Enum(*constants.delivery_failure_reason_name_map.keys())
-MoreMessagesToSend = Enum(*constants.more_messages_to_send_name_map.keys())
+AddrSubunit = Enum(*list(constants.addr_subunit_name_map.keys()))
+NetworkType = Enum(*list(constants.network_type_name_map.keys()))
+BearerType = Enum(*list(constants.bearer_type_name_map.keys()))
+PayloadType = Enum(*list(constants.payload_type_name_map.keys()))
+PrivacyIndicator = Enum(*list(constants.privacy_indicator_name_map.keys()))
+LanguageIndicator = Enum(*list(constants.language_indicator_name_map.keys()))
+DisplayTime = Enum(*list(constants.display_time_name_map.keys()))
+MsAvailabilityStatus = Enum(*list(constants.ms_availability_status_name_map.keys()))
+NetworkErrorCode = Enum(*list(constants.network_error_code_name_map.keys()))
+DeliveryFailureReason = Enum(*list(constants.delivery_failure_reason_name_map.keys()))
+MoreMessagesToSend = Enum(*list(constants.more_messages_to_send_name_map.keys()))
 
-class PDU(object):
+class PDU:
     commandId = None
     mandatoryParams = []
     optionalParams = []
@@ -135,19 +139,25 @@ class PDU(object):
         self.id = self.commandId
         self.seqNum = seqNum
         self.status = status
+        # TLV format
+        # (tag:int, length:int|None, type:str, value:str/int)
+        self.custom_tlvs = kwargs.pop('custom_tlvs', [])
         self.params = kwargs
+
         for mParam in self.mandatoryParams:
             if mParam not in self.params:
                 self.params[mParam] = None
     
     def __repr__(self):
+        # Jasmin update:
+        # Displaying values with %r converter since %s doesnt work with unicode
         r = "PDU [command: %s, sequence_number: %s, command_status: %s" % (self.id, self.seqNum, self.status)
         for mParam in self.mandatoryParams:
             if mParam in self.params:
-                r += "\n%s: %s" % (mParam, self.params[mParam])
-        for oParam in self.params.keys():
+                r += "\n%s: %r" % (mParam, self.params[mParam])
+        for oParam in list(self.params):
             if oParam not in self.mandatoryParams:
-                r += "\n%s: %s" % (oParam, self.params[oParam])                
+                r += "\n%s: %r" % (oParam, self.params[oParam])                
         r += '\n]'
         return r
         

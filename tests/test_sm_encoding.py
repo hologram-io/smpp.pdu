@@ -13,7 +13,9 @@ Copyright 2009-2010 Mozes, Inc.
    See the License for the specific language governing permissions and
    limitations under the License.
 """
-import unittest, binascii, StringIO
+from io import BytesIO
+import unittest
+import binascii
 from smpp.pdu.sm_encoding import SMStringEncoder
 from smpp.pdu.pdu_types import *
 from smpp.pdu.gsm_types import *
@@ -22,7 +24,7 @@ from smpp.pdu.pdu_encoding import PDUEncoder
 class SMDecoderTest(unittest.TestCase):
 
     def getPDU(self, hexStr):
-        return PDUEncoder().decode(StringIO.StringIO(binascii.a2b_hex(hexStr)))
+        return PDUEncoder().decode(BytesIO(binascii.a2b_hex(hexStr)))
 
     def test_decode_UCS2(self):
         pduHex = '000000480000000500000000dfd03a56415753424400010131353535313233343536370001013137373338323834303730000000000000000008000c00f10075014400ed00fc0073'

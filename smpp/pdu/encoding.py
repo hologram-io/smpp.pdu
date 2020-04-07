@@ -16,7 +16,7 @@ Copyright 2009-2010 Mozes, Inc.
 from smpp.pdu import pdu_types
 from smpp.pdu.error import PDUCorruptError
 
-class IEncoder(object):
+class IEncoder:
 
     def encode(self, value):
         """Takes an object representing the type and returns a byte string"""

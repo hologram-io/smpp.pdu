@@ -13,8 +13,8 @@ Copyright 2009-2010 Mozes, Inc.
    See the License for the specific language governing permissions and
    limitations under the License.
 """
+from io import StringIO
 import unittest
-import StringIO
 import binascii
 from smpp.pdu.gsm_encoding import *
 from smpp.pdu.gsm_types import *
@@ -25,37 +25,37 @@ class EncoderTest(unittest.TestCase):
         encoded = encoder.encode(value)
         hexEncoded = binascii.b2a_hex(encoded)
         if hexdumpValue != hexEncoded:
-            print "\nHex Value:\n%s" % hexdumpValue
-            print "Hex Encoded:\n%s" % hexEncoded
+            print("\nHex Value:\n%s" % hexdumpValue)
+            print("Hex Encoded:\n%s" % hexEncoded)
             chars1 = list(hexdumpValue)
             chars2 = list(hexEncoded)
             for i in range(0, len(hexEncoded)):
                 if chars1[i] != chars2[i]:
-                    print "Letter %d diff [%s] [%s]" % (i, chars1[i], chars2[i])
+                    print("Letter %d diff [%s] [%s]" % (i, chars1[i], chars2[i]))
             
         self.assertEquals(hexdumpValue, hexEncoded)
-        file = StringIO.StringIO(encoded)
+        file = StringIO(encoded)
         decoded = encoder.decode(file)
         self.assertEquals(value, decoded)
         
     def do_null_encode_test(self, encoder, nullDecodeVal, hexdumpValue):
         encoded = encoder.encode(None)
         self.assertEquals(hexdumpValue, binascii.b2a_hex(encoded))
-        file = StringIO.StringIO(encoded)
+        file = StringIO(encoded)
         decoded = encoder.decode(file)
         self.assertEquals(nullDecodeVal, decoded)
         
     def decode(self, decodeFunc, hexdumpValue):
         bytes = binascii.a2b_hex(hexdumpValue)
-        # print "hex: %s, num bytes %s" % (hexdumpValue, len(bytes))
-        file = StringIO.StringIO(bytes)
+        # print("hex: %s, num bytes %s" % (hexdumpValue, len(bytes)))
+        file = StringIO(bytes)
         error = None
         decoded = None
         try:
             decoded = decodeFunc(file)
-        except Exception, e:
+        except Exception as e:
             error = e
-        # print "file index: %s" % file.tell()
+        # print("file index: %s" % file.tell())
         self.assertEquals(len(bytes), file.tell())
         if error:
             raise error

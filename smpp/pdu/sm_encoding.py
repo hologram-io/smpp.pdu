@@ -13,7 +13,8 @@ Copyright 2009-2010 Mozes, Inc.
    See the License for the specific language governing permissions and
    limitations under the License.
 """
-import struct, StringIO
+from io import BytesIO
+import struct
 from smpp.pdu.operations import DeliverSM, DataSM
 from smpp.pdu.pdu_types import *
 from smpp.pdu.namedtuple import namedtuple
@@ -22,7 +23,7 @@ from smpp.pdu.gsm_encoding import UserDataHeaderEncoder
 
 ShortMessageString = namedtuple('ShortMessageString', 'bytes, unicode, udh')
 
-class SMStringEncoder(object):
+class SMStringEncoder:
     userDataHeaderEncoder = UserDataHeaderEncoder()
         
     def decodeSM(self, pdu):
@@ -34,13 +35,13 @@ class SMStringEncoder(object):
         if data_coding.scheme == DataCodingScheme.DEFAULT:
             unicodeStr = None
             if data_coding.schemeData == DataCodingDefault.SMSC_DEFAULT_ALPHABET:
-                unicodeStr = unicode(smStrBytes, 'ascii')
+                unicodeStr = str(smStrBytes, 'ascii')
             elif data_coding.schemeData == DataCodingDefault.IA5_ASCII:
-                unicodeStr = unicode(smStrBytes, 'ascii')
+                unicodeStr = str(smStrBytes, 'ascii')
             elif data_coding.schemeData == DataCodingDefault.UCS2:
-                unicodeStr = unicode(smStrBytes, 'UTF-16BE')
+                unicodeStr = str(smStrBytes, 'UTF-16BE')
             elif data_coding.schemeData == DataCodingDefault.LATIN_1:
-                unicodeStr = unicode(smStrBytes, 'latin_1')
+                unicodeStr = str(smStrBytes, 'latin_1')
             if unicodeStr is not None:
                 return ShortMessageString(smBytes, unicodeStr, udh)
                 
@@ -70,7 +71,7 @@ class SMStringEncoder(object):
                 
     def decodeUDH(self, udhBytes):
         if udhBytes is not None:
-            return self.userDataHeaderEncoder.decode(StringIO.StringIO(udhBytes))
+            return self.userDataHeaderEncoder.decode(BytesIO(udhBytes))
         return None
             
     def splitSM(self, pdu):
