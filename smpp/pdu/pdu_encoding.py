@@ -148,7 +148,10 @@ class IntegerBaseEncoder(PDUNullableFieldEncoder):
         return self.read(file, self.size)
 
     def _decode(self, dec_bytes):
-        return struct.unpack(self.sizeFmtMap[self.size], bytes(dec_bytes))[0]
+        if isinstance(dec_bytes, bytes):
+            return struct.unpack(self.sizeFmtMap[self.size], dec_bytes)[0]
+        else:
+            return struct.unpack(self.sizeFmtMap[self.size], bytes([dec_bytes]))[0]
 
 
 class Int4Encoder(IntegerBaseEncoder):
@@ -181,7 +184,7 @@ class OctetStringEncoder(PDUNullableFieldEncoder):
             if length != self.getSize():
                 raise ValueError("Value (%s) size %d does not match expected %d" % (value, length, self.getSize()))
 
-        return bytes(value)
+        return bytes([value])
 
     def _read(self, file):
         if self.getSize() is None:
