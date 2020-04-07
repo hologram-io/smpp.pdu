@@ -13,7 +13,7 @@ Copyright 2009-2010 Mozes, Inc.
    See the License for the specific language governing permissions and
    limitations under the License.
 """
-from io import StringIO
+from io import BytesIO
 import unittest
 import binascii
 from smpp.pdu.gsm_encoding import *
@@ -34,21 +34,21 @@ class EncoderTest(unittest.TestCase):
                     print("Letter %d diff [%s] [%s]" % (i, chars1[i], chars2[i]))
             
         self.assertEquals(hexdumpValue, hexEncoded)
-        file = StringIO(encoded)
+        file = BytesIO(encoded)
         decoded = encoder.decode(file)
         self.assertEquals(value, decoded)
         
     def do_null_encode_test(self, encoder, nullDecodeVal, hexdumpValue):
         encoded = encoder.encode(None)
         self.assertEquals(hexdumpValue, binascii.b2a_hex(encoded))
-        file = StringIO(encoded)
+        file = BytesIO(encoded)
         decoded = encoder.decode(file)
         self.assertEquals(nullDecodeVal, decoded)
         
     def decode(self, decodeFunc, hexdumpValue):
         bytes = binascii.a2b_hex(hexdumpValue)
         # print("hex: %s, num bytes %s" % (hexdumpValue, len(bytes)))
-        file = StringIO(bytes)
+        file = BytesIO(bytes)
         error = None
         decoded = None
         try:

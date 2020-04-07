@@ -8,12 +8,12 @@ Examples
 Decoding (parsing) PDUs
 --------------------------
     import binascii
-    import StringIO
+    from io import BytesIO
     from smpp.pdu.pdu_encoding import PDUEncoder
 
     hex = '0000004d00000005000000009f88f12441575342440001013136353035353531323334000101313737333535353430373000000000000000000300117468657265206973206e6f2073706f6f6e'
     binary = binascii.a2b_hex(hex)
-    file = StringIO.StringIO(binary)
+    file = BytesIO(binary)
 
     pdu = PDUEncoder().decode(file)
     print "PDU: %s" % pdu

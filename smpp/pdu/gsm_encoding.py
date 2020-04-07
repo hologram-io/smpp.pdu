@@ -69,7 +69,7 @@ class IEConcatenatedSMEncoder(IEncoder):
         self.is16bitRefNum = is16bitRefNum
     
     def encode(self, cms):
-        bytes = ''
+        bytes = b''
         if self.is16bitRefNum:
             bytes += self.int16Encoder.encode(cms.referenceNum)
         else:
@@ -104,7 +104,7 @@ class InformationElementEncoder(IEncoder):
             dataBytes = iElement.data
         length = len(dataBytes)
             
-        bytes = ''
+        bytes = b''
         bytes += self.iEIEncoder.encode(iElement.identifier)
         bytes += self.int8Encoder.encode(length)
         bytes += dataBytes
@@ -142,7 +142,7 @@ class UserDataHeaderEncoder(IEncoder):
         
     def encode(self, udh):
         nonRepeatable = {}
-        iEBytes = ''
+        iEBytes = b''
         for iElement in udh:
             if not self.isIdentifierRepeatable(iElement.identifier):
                 if iElement.identifier in nonRepeatable:
