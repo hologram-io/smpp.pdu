@@ -50,7 +50,7 @@ class IEncoder:
 
 class EmptyEncoder(IEncoder):
     def encode(self, value):
-        return ''
+        return b''
 
     def decode(self, file):
         return None
@@ -889,7 +889,7 @@ class OptionEncoder(IEncoder):
         encoder = self.options[option.tag]
         encodedValue = encoder.encode(option.value)
         length = len(encodedValue)
-        return ''.join([
+        return b''.join([
             TagEncoder().encode(option.tag),
             Int2Encoder().encode(length),
             encodedValue,
