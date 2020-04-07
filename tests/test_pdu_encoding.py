@@ -300,11 +300,11 @@ class SubaddressTypeTagEncoderTest(EncoderTest):
 class SubaddressEncoderTest(EncoderTest):
 
     def test_conversion(self):
-        self.do_conversion_test(SubaddressEncoder(4), Subaddress(SubaddressTypeTag.USER_SPECIFIED, value='742'), 'a0373432')
+        self.do_conversion_test(SubaddressEncoder(4), Subaddress(SubaddressTypeTag.USER_SPECIFIED, value=b'742'), 'a0373432')
 
     def test_decode_invalid_type(self):
         "#325: any invalid type will be marked as RESERVED"
-        self.do_conversion_test(SubaddressEncoder(4), Subaddress(SubaddressTypeTag.RESERVED, value='742'), '00373432')
+        self.do_conversion_test(SubaddressEncoder(4), Subaddress(SubaddressTypeTag.RESERVED, value=b'742'), '00373432')
 
     def test_decode_invalid_size(self):
         self.do_decode_parse_error_test(SubaddressEncoder(1).decode, CommandStatus.ESME_RINVOPTPARAMVAL, 'a0373432')
@@ -327,8 +327,8 @@ class TimeEncoderEncoderTest(EncoderTest):
 class ShortMessageEncoderTest(EncoderTest):
 
     def test_conversion(self):
-        self.do_conversion_test(ShortMessageEncoder(), 'hello', '0568656c6c6f')
-        self.do_null_encode_test(ShortMessageEncoder(), '', '00')
+        self.do_conversion_test(ShortMessageEncoder(), b'hello', '0568656c6c6f')
+        self.do_null_encode_test(ShortMessageEncoder(), b'', '00')
 
 class OptionEncoderTest(EncoderTest):
 

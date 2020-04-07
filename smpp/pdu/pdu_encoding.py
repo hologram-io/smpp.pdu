@@ -89,6 +89,10 @@ class PDUNullableFieldEncoder(IEncoder):
 
     def decode(self, file):
         dec_bytes = self._read(file)
+        print(dec_bytes)
+        print(self.decodeNull)
+        print(self.requireNull)
+        print(self.nullHex)
         if self.decodeNull:
             if self.nullHex is None:
                 raise NotImplementedError("No value for null")
