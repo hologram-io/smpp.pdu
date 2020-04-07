@@ -162,12 +162,20 @@ class PDU:
         return r
         
     def __eq__(self, pdu):
+        print(self.id)
+        print(pdu.id)
         if self.id != pdu.id:
             return False
+        print(self.seqNum)
+        print(pdu.seqNum)
         if self.seqNum != pdu.seqNum:
             return False
+        print(self.status)
+        print(pdu.status)
         if self.status != pdu.status:
             return False
+        print(self.params)
+        print(pdu.params)
         if self.params != pdu.params:
             return False
         return True
