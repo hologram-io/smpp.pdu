@@ -64,6 +64,11 @@ def unparse_nn(nn):
 def parse_absolute_time(tstr):
     (YYMMDDhhmmss, t, nn, p) = (tstr[:12], tstr[12:13], tstr[13:15], tstr[15])
 
+    print(YYMMDDhhmmss)
+    print(t)
+    print(nn)
+    print(p)
+
     if isinstance(p, str):
         p = p.encode()
 
