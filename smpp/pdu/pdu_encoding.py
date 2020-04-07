@@ -1001,7 +1001,7 @@ class PDUEncoder(IEncoder):
 
     def getRequiredParamEncoders(self, pdu):
         if pdu.id in self.CustomRequiredParamEncoders:
-            return dict(self.DefaultRequiredParamEncoders.items() + self.CustomRequiredParamEncoders[pdu.id].items())
+            return {**self.DefaultRequiredParamEncoders, **self.CustomRequiredParamEncoders[pdu.id]}
         return self.DefaultRequiredParamEncoders
 
     def encode(self, pdu):
