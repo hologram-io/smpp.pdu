@@ -61,15 +61,13 @@ def unparse_nn(nn):
         raise ValueError("time difference must be 0-48")
     return '%02d' % nn
 
-def parse_absolute_time(tstr):
-    (YYMMDDhhmmss, t, nn, p) = (tstr[:12], tstr[12:13], tstr[13:15], tstr[15])
+def parse_absolute_time(t_str):
+    if isinstance(t_str, bytes):
+        t_str = t_str.decode()
+    (YYMMDDhhmmss, t, nn, p) = (t_str[:12], t_str[12:13], t_str[13:15], t_str[15])
 
-    if isinstance(p, bytes):
-        p = p.decode('ascii')
-    elif isinstance(p, int):
+    if isinstance(p, int):
         p = chr(p)
-
-    print(p)
 
     if p not in ['+', '-']:
         raise ValueError("Invalid offset indicator %s" % p)
@@ -82,30 +80,30 @@ def parse_absolute_time(tstr):
     tzinfo = None
     if quarterHrOffset > 0:
         minOffset = quarterHrOffset * 15
-        if p == b'-':
+        if p == '-':
             minOffset *= -1
         tzinfo = FixedOffset(minOffset, None)
 
     timeVal = parse_YYMMDDhhmmss(YYMMDDhhmmss)
     return timeVal.replace(microsecond=microseconds,tzinfo=tzinfo)
 
-def parse_relative_time(dtstr):
+def parse_relative_time(dt_str):
     # example 600 seconds is: '000000001000000R'
 
     try:
-        year =  int(dtstr[:2])
-        month = int(dtstr[2:4])
-        day = int(dtstr[4:6])
-        hour = int(dtstr[6:8])
-        minute = int(dtstr[8:10])
-        second = int(dtstr[10:12])
-        dsecond = int(dtstr[12:13])
+        year =  int(dt_str[:2])
+        month = int(dt_str[2:4])
+        day = int(dt_str[4:6])
+        hour = int(dt_str[6:8])
+        minute = int(dt_str[8:10])
+        second = int(dt_str[10:12])
+        dsecond = int(dt_str[12:13])
 
         # According to spec dsecond should be set to 0
         if dsecond != 0:
             raise ValueError("SMPP v3.4 spec violation: tenths of second value is %s instead of 0"% dsecond)
     except IndexError as e:
-        raise ValueError("Error %s : Unable to parse relative Validity Period %s" % e,dtstr)
+        raise ValueError("Error %s : Unable to parse relative Validity Period %s" % e,dt_str)
 
     return SMPPRelativeTime(year,month,day,hour,minute,second)
 
@@ -144,6 +142,8 @@ def parse(t_str):
     Returns SMPPRelativeTime for relative time format (note: datetime.timedelta cannot
     because the SMPP relative time interval depends on the SMSC current date/time)
     """
+    if isinstance(t_str, bytes):
+        t_str = t_str.decode()
     if len(t_str) != 16:
         raise ValueError("Invalid time length %d" % len(t_str))
     if (t_str[-1]) == b'R':
