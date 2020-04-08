@@ -14,6 +14,11 @@ Copyright 2009-2010 Mozes, Inc.
    limitations under the License.
 """
 import unittest
+import sys
+
+sys.path.append(".")
+sys.path.append("..")
+sys.path.append("../..")
 from smpp.pdu.pdu_types import *
 
 class EsmClassTest(unittest.TestCase):

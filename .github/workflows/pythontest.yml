@@ -27,7 +27,9 @@ jobs:
         pip install pylint
         pylint -rn --errors-only ./smpp 
     - name: Test
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       run: |
-        pip install pytest-cov
-        pip install .
+        pip install coveralls pytest-cov
         pytest --cov=smpp tests/
+        coveralls

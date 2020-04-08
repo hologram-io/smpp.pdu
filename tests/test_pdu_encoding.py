@@ -17,6 +17,11 @@ from io import BytesIO
 import unittest
 import binascii
 from datetime import datetime
+import sys
+
+sys.path.append(".")
+sys.path.append("..")
+sys.path.append("../..")
 from smpp.pdu.smpp_time import SMPPRelativeTime
 from smpp.pdu.pdu_encoding import *
 from smpp.pdu.pdu_types import *

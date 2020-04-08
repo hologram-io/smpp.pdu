@@ -16,6 +16,11 @@ Copyright 2009-2010 Mozes, Inc.
 from io import BytesIO
 import unittest
 import binascii
+import sys
+
+sys.path.append(".")
+sys.path.append("..")
+sys.path.append("../..")
 from smpp.pdu.sm_encoding import SMStringEncoder
 from smpp.pdu.pdu_types import *
 from smpp.pdu.gsm_types import *

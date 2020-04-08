@@ -1,6 +1,10 @@
-smpp.pdu is a Python library for parsing Protocol Data Units (PDUs) in SMPP protocol
+# smpp.pdu
 
+smpp.pdu is a Python library for parsing Protocol Data Units (PDUs) in SMPP protocol
 http://www.nowsms.com/discus/messages/1/24856.html 
+
+[![Tests](https://github.com/DomAmato/smpp.pdu/workflows/Python%20Test/badge.svg)](https://github.com/DomAmato/smpp.pdu/actions)
+[![Coverage Status](https://coveralls.io/repos/github/DomAmato/smpp.pdu/badge.svg?branch=master)](https://coveralls.io/github/DomAmato/smpp.pdu?branch=master)
 
 Examples
 ========
