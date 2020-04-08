@@ -64,6 +64,7 @@ def unparse_nn(nn):
 def parse_absolute_time(t_str):
     if isinstance(t_str, bytes):
         t_str = t_str.decode()
+    
     (YYMMDDhhmmss, t, nn, p) = (t_str[:12], t_str[12:13], t_str[13:15], t_str[15])
 
     if isinstance(p, int):
@@ -144,9 +145,10 @@ def parse(t_str):
     """
     if isinstance(t_str, bytes):
         t_str = t_str.decode()
+    print(t_str[-1])
     if len(t_str) != 16:
         raise ValueError("Invalid time length %d" % len(t_str))
-    if (t_str[-1]) == b'R':
+    if (t_str[-1]) == 'R':
         return parse_relative_time(t_str)
     return parse_absolute_time(t_str)
 
