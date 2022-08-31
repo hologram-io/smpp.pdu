@@ -126,7 +126,18 @@ PrivacyIndicator = Enum('PrivacyIndicator', list(constants.privacy_indicator_nam
 LanguageIndicator = Enum('LanguageIndicator', list(constants.language_indicator_name_map.keys()))
 DisplayTime = Enum('DisplayTime', list(constants.display_time_name_map.keys()))
 MsAvailabilityStatus = Enum('MsAvailabilityStatus', list(constants.ms_availability_status_name_map.keys()))
-NetworkErrorCode = Enum('NetworkErrorCode', list(constants.network_error_code_name_map.keys()))
+
+
+NetworkErrorCodeNetworkType = Enum('NetworkErrorCodeNetworkType', list(constants.network_error_code_name_map.keys()))
+
+NetworkErrorCodeBase = namedtuple('NetworkErrorCode', 'networkType, value')
+class NetworkErrorCode(NetworkErrorCodeBase):
+    def __new__(cls, networkType, value):
+        return NetworkErrorCodeBase.__new__(cls, networkType, value)
+
+    def __repr__(self):
+        return 'NetworkErrorCode[networkType: %s, value: %s]' % (self.networkType, self.value)
+
 DeliveryFailureReason = Enum('DeliveryFailureReason', list(constants.delivery_failure_reason_name_map.keys()))
 MoreMessagesToSend = Enum('MoreMessagesToSend', list(constants.more_messages_to_send_name_map.keys()))
 
