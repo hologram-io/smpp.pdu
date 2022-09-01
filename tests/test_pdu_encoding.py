@@ -30,7 +30,8 @@ from smpp.pdu.operations import *
 class EncoderTest(unittest.TestCase):
 
     def do_decode_encode_test(self, encoder, value, hexdumpValue):
-        decoded = self.decode(encoder.decode, hexdumpValue)
+        binary = BytesIO(binascii.a2b_hex(hexdumpValue))
+        decoded = encoder.decode(binary)
         self.assertEqual(value, decoded)
 
         encoded = encoder.encode(value)
@@ -50,7 +51,7 @@ class EncoderTest(unittest.TestCase):
     def do_encode_decode_test(self, encoder, value, hexdumpValue):
         encoded = encoder.encode(value)
         hexEncoded = binascii.b2a_hex(encoded)
-        if hexdumpValue != hexEncoded:
+        if hexdumpValue.encode() != hexEncoded:
             print("\nHex Value:\n%s" % hexdumpValue)
             print("Hex Encoded:\n%s" % hexEncoded)
             chars1 = list(hexdumpValue)
@@ -67,7 +68,7 @@ class EncoderTest(unittest.TestCase):
     def do_encode_test(self, encoder, value, hexdumpValue):
         encoded = encoder.encode(value)
         hexEncoded = binascii.b2a_hex(encoded)
-        if hexdumpValue != hexEncoded:
+        if hexdumpValue.encode() != hexEncoded:
             print("\nHex Value:\n%s" % hexdumpValue)
             print("Hex Encoded:\n%s" % hexEncoded)
             chars1 = list(hexdumpValue)
@@ -510,7 +511,7 @@ class PDUEncoderTest(EncoderTest):
             short_message=binascii.a2b_hex('027000002815162115150000001BB5B34A2FAB312CFA8ECDD7779158747AC742C463CDD53B41963E49979D95AC'),
         )
 
-        self.do_decode_encode_test(PDUEncoder(), pdu, '0000005c00000004000000000006f391000500303334380001013339363938303933343200407f0000000100f6002d027000002815162115150000001bb5b34a2fab312cfa8ecdd7779158747ac742c463cdd53b41963e49979d95ac')
+        self.do_encode_decode_test(PDUEncoder(), pdu, '0000005c00000004000000000006f391000500303334380001013339363938303933343200407f0000000100f6002d027000002815162115150000001bb5b34a2fab312cfa8ecdd7779158747ac742c463cdd53b41963e49979d95ac')
 
 
     def test_EnquireLink_conversion(self):
@@ -596,23 +597,23 @@ class PDUEncoderTest(EncoderTest):
                         esm_class=EsmClass(EsmClassMode.DEFAULT, EsmClassType.DEFAULT),
                         protocol_id=0,
                         priority_flag=PriorityFlag.LEVEL_0,
+                        schedule_delivery_time=None,
+                        validity_period=None,
                         registered_delivery=RegisteredDelivery(
                             RegisteredDeliveryReceipt.NO_SMSC_DELIVERY_RECEIPT_REQUESTED),
                         replace_if_present_flag=ReplaceIfPresentFlag.DO_NOT_REPLACE,
                         data_coding=DataCoding(DataCodingScheme.GSM_MESSAGE_CLASS,
                                                DataCodingGsmMsg(DataCodingGsmMsgCoding.DEFAULT_ALPHABET,
                                                                 DataCodingGsmMsgClass.CLASS_2)),
-                        short_message='id:bc59b8aa-2fd2-4035-8113-19301e050079 sub:001 dlvrd:001 submit date:150508144058 done date:150508144058 stat:DELIVRD err:000 text:-',
                         sm_default_msg_id=0,
-                        message_state=MessageState.DELIVERED,
-                        receipted_message_id='bc59b8aa-2fd2-4035-8113-19301e050079',
+                        short_message='id:bc59b8aa-2fd2-4035-8113-19301e050079 sub:001 dlvrd:001 submit date:150508144058 done date:150508144058 stat:DELIVRD err:000 text:-',
                         network_error_code=NetworkErrorCode(NetworkErrorCodeNetworkType.GSM, b'\x00\x00'),
+                        message_state=MessageState.DELIVERED,
+                        receipted_message_id='bc59b8aa-2fd2-4035-8113-19301e050079'
                         )
         self.do_encode_decode_test(PDUEncoder(), pdu, '000000f30000000500000000000000010001013439313532353637393438383700010130343035313330363939390000000000000000f2008569643a62633539623861612d326664322d343033352d383131332d313933303165303530303739207375623a30303120646c7672643a303031207375626d697420646174653a31353035303831343430353820646f6e6520646174653a31353035303831343430353820737461743a44454c49565244206572723a30303020746578743a2d042300030300000427000102001e002562633539623861612d326664322d343033352d383131332d31393330316530353030373900')
 
     def test_reuse_encoder_for_encode_and_decode(self):
-        """Related to #117"""
-
         pdu = DeliverSM(1,
                         service_type='',
                         source_addr_ton=AddrTon.INTERNATIONAL,
@@ -624,19 +625,22 @@ class PDUEncoderTest(EncoderTest):
                         esm_class=EsmClass(EsmClassMode.DEFAULT, EsmClassType.DEFAULT),
                         protocol_id=0,
                         priority_flag=PriorityFlag.LEVEL_0,
+                        schedule_delivery_time=None,
+                        validity_period=None,
                         registered_delivery=RegisteredDelivery(
                             RegisteredDeliveryReceipt.NO_SMSC_DELIVERY_RECEIPT_REQUESTED),
                         replace_if_present_flag=ReplaceIfPresentFlag.DO_NOT_REPLACE,
                         data_coding=DataCoding(DataCodingScheme.GSM_MESSAGE_CLASS,
                                                DataCodingGsmMsg(DataCodingGsmMsgCoding.DEFAULT_ALPHABET,
                                                                 DataCodingGsmMsgClass.CLASS_2)),
-                        short_message='id:bc59b8aa-2fd2-4035-8113-19301e050079 sub:001 dlvrd:001 submit date:150508144058 done date:150508144058 stat:DELIVRD err:000 text:-',
                         sm_default_msg_id=0,
-                        message_state=MessageState.DELIVERED,
-                        receipted_message_id='bc59b8aa-2fd2-4035-8113-19301e050079',
+                        short_message='id:bc59b8aa-2fd2-4035-8113-19301e050079 sub:001 dlvrd:001 submit date:150508144058 done date:150508144058 stat:DELIVRD err:000 text:-',
                         network_error_code=NetworkErrorCode(NetworkErrorCodeNetworkType.GSM, b'\x00\x00'),
+                        message_state=MessageState.DELIVERED,
+                        message_payload='Some string payload',
+                        receipted_message_id='bc59b8aa-2fd2-4035-8113-19301e050079'
                         )
-        self.do_encode_decode_test(PDUEncoder(), pdu, '000000f30000000500000000000000010001013439313532353637393438383700010130343035313330363939390000000000000000f2008569643a62633539623861612d326664322d343033352d383131332d313933303165303530303739207375623a30303120646c7672643a303031207375626d697420646174653a31353035303831343430353820646f6e6520646174653a31353035303831343430353820737461743a44454c49565244206572723a30303020746578743a2d042300030300000427000102001e002562633539623861612d326664322d343033352d383131332d31393330316530353030373900')
+        self.do_decode_encode_test(PDUEncoder(), pdu, '0000010a0000000500000000000000010001013439313532353637393438383700010130343035313330363939390000000000000000f2008569643a62633539623861612d326664322d343033352d383131332d313933303165303530303739207375623a30303120646c7672643a303031207375626d697420646174653a31353035303831343430353820646f6e6520646174653a31353035303831343430353820737461743a44454c49565244206572723a30303020746578743a2d04240013536f6d6520737472696e67207061796c6f6164042300030300000427000102001e002562633539623861612d326664322d343033352d383131332d31393330316530353030373900')
 
     def test_DeliverSM_with_vendor_specific_bypass(self):
         """#449: fixing the 'Value -1 is less than min 0' error caused by the vendor_specific_bypass parameter"""
