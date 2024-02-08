@@ -987,7 +987,7 @@ class PDUEncoder(IEncoder):
 
     DefaultRequiredParamEncoders = {
         'system_id': COctetStringEncoder(16, decodeErrorStatus=pdu_types.CommandStatus.ESME_RINVSYSID),
-        'password': COctetStringEncoder(9, decodeErrorStatus=pdu_types.CommandStatus.ESME_RINVPASWD),
+        'password': COctetStringEncoder(16, decodeErrorStatus=pdu_types.CommandStatus.ESME_RINVPASWD),
         'system_type': COctetStringEncoder(13),
         'interface_version': Int1Encoder(),
         'addr_ton': AddrTonEncoder(),
